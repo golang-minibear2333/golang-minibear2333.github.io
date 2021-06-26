@@ -26,7 +26,7 @@ Go 语言中的 reader 和 writer 接口也类似。我们只需简单的读写�
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.ea6717a4caf675b694ef8b9e3f2065b6c1b46d43c0f34b83e7b487f27fee9430.js" integrity="sha256-6mcXpMr2dbaU74uePyBltsG0bUPA80uD57SH8n/ulDA=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.f5653653434fac73aa8d1cd046b8b2fa2ce8221a20e086faabf08e2b1464925a.js" integrity="sha256-9WU2U0NPrHOqjRzQRriy&#43;izoIhog4Ib6q/COKxRkklo=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -36,13 +36,13 @@ https://github.com/alex-shpak/hugo-book
   
 </head>
 <body dir="ltr">
-  <input type="checkbox" class="hidden toggle" id="menu-control" />
-  <input type="checkbox" class="hidden toggle" id="toc-control" />
-  <main class="container flex">
-    <aside class="book-menu">
-      <div class="book-menu-content">
-        
-  <nav>
+<input type="checkbox" class="hidden toggle" id="menu-control" />
+<input type="checkbox" class="hidden toggle" id="toc-control" />
+<main class="container flex">
+  <aside class="book-menu">
+    <div class="book-menu-content">
+      
+<nav>
 <h2 class="book-brand">
   <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
   </a>
@@ -139,7 +139,7 @@ https://github.com/alex-shpak/hugo-book
 <li><strong>时间处理与定时任务</strong>
 <ul>
 <li>
-  <a href="/a.timer/reset/readme/">设置可热更新的定时器</a></li>
+  <a href="/a.timer/reset/reset-time/">设置可热更新的定时器</a></li>
 </ul>
 </li>
 <li><strong>常用操作</strong>
@@ -186,74 +186,22 @@ https://github.com/alex-shpak/hugo-book
 
 
  
-      </div>
-    </aside>
-
-    <div class="book-page">
-      <header class="book-header">
-        
-  <div class="flex align-center justify-between">
-  <label for="menu-control">
-    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
-  </label>
-
-  <strong>Go文件操作大全</strong>
-
-  <label for="toc-control">
-    
-    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
-    
-  </label>
-</div>
-
-
-  
-  <aside class="hidden clearfix">
-    
-  
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#介绍">介绍</a>
-      <ul>
-        <li><a href="#万物皆文件">万物皆文件</a></li>
-      </ul>
-    </li>
-    <li><a href="#基本操作">基本操作</a>
-      <ul>
-        <li><a href="#创建空文件">创建空文件</a></li>
-        <li><a href="#truncate-文件">Truncate 文件</a></li>
-        <li><a href="#得到文件信息">得到文件信息</a></li>
-        <li><a href="#重命名和移动">重命名和移动</a></li>
-        <li><a href="#删除文件">删除文件</a></li>
-        <li><a href="#打开和关闭文件">打开和关闭文件</a></li>
-        <li><a href="#检查文件是否存在">检查文件是否存在</a></li>
-        <li><a href="#检查读写权限">检查读写权限</a></li>
-        <li><a href="#改变权限拥有者时间戳">改变权限、拥有者、时间戳</a></li>
-        <li><a href="#硬链接和软链接">硬链接和软链接</a></li>
-      </ul>
-    </li>
-    <li><a href="#读写">读写</a>
-      <ul>
-        <li><a href="#复制文件">复制文件</a></li>
-        <li><a href="#跳转到文件指定位置seek">跳转到文件指定位置(Seek)</a></li>
-        <li><a href="#压缩">压缩</a></li>
-        <li><a href="#其它">其它</a></li>
-        <li><a href="#参考">参考</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-
-
-
+    </div>
   </aside>
-  
- 
-      </header>
 
+  <div class="book-page">
+    <header class="book-header">
       
-      
-  <article class="markdown"><p>Go 官方库的文件操作分散在多个包中，比如<code>os</code>、<code>ioutil</code>包，我本来想写一篇总结性的 Go 文件操作的文章，却发现已经有人 2015 年已经写了一篇这样的文章，写的非常好，所以我翻译成了中文，强烈推荐你阅读一下。</p>
+
+ 
+    </header>
+
+    
+    
+<main class="site-main section-inner thin animated fadeIn faster">
+  <h1></h1>
+  <div class="content">
+    <p>Go 官方库的文件操作分散在多个包中，比如<code>os</code>、<code>ioutil</code>包，我本来想写一篇总结性的 Go 文件操作的文章，却发现已经有人 2015 年已经写了一篇这样的文章，写的非常好，所以我翻译成了中文，强烈推荐你阅读一下。</p>
 <p>原文: 
   <a href="http://www.devdungeon.com/content/working-files-go#write_bytes">Working with Files in Go</a>, 作者: 
   <a href="http://www.devdungeon.com/blogs/nanodano">NanoDano</a></p>
@@ -2078,48 +2026,45 @@ https://github.com/alex-shpak/hugo-book
 </h3>
 <p>
   <a href="https://golang.org/pkg">Go Standard Library Documentation</a></p>
-</article>
- 
-      
 
-      <footer class="book-footer">
-        
-  <div class="flex flex-wrap justify-between">
-
-
-
-
-
-  <div>
-    <a class="flex align-center" href="https://github.com/minibear2333/golang/edit/master/content/%e7%95%aa%e5%a4%96.%e5%b8%b8%e7%94%a8%e6%93%8d%e4%bd%9c/Go%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c%e5%a4%a7%e5%85%a8.md" target="_blank" rel="noopener">
-      <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
-      <span>Edit this page</span>
-    </a>
   </div>
-
-</div>
-
-
-
-  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
-
-
+  <div class="book-footer justify-between"></div>
+  <hr style="height: 1px;
+    background: var(--gray-200);">
+  <br>
+  <p>本图书由<a href="https://github.com/minibear2333">小熊</a>©2021 版权所有，<a href="https://golang.coding3min.com/">所有文章</a>采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">知识署名-非商业性使用-禁止演绎 4.0 国际</a>进行许可。</p>
+  <div id="comments" class="thin">
+    <script src="https://utteranc.es/client.js"
+        repo="minibear2333/blog-comment"
+        issue-term="title"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+  </div>
+</main>
  
-        
-      </footer>
+    
 
+    <footer class="book-footer">
       
-  
- 
 
-      <label for="menu-control" class="hidden book-menu-overlay"></label>
-    </div>
+ 
+      
+    </footer>
 
     
-    <aside class="book-toc">
-      <div class="book-toc-content">
-        
+
+ 
+
+    <label for="menu-control" class="hidden book-menu-overlay"></label>
+  </div>
+
   
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+
 <nav id="TableOfContents">
   <ul>
     <li><a href="#介绍">介绍</a>
@@ -2155,15 +2100,14 @@ https://github.com/alex-shpak/hugo-book
 
 
  
-      </div>
-    </aside>
-    
-  </main>
-
+    </div>
+  </aside>
   
+</main>
+
+
 </body>
 </html>
-
 
 
 

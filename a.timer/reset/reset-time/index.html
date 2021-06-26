@@ -9,16 +9,16 @@ package main import ( &#34;fmt&#34; &#34;time&#34; ) type Server struct { tk *ti
 <meta property="og:description" content="可热更新的定时器 #  废话不多说，直接上代码
 package main import ( &#34;fmt&#34; &#34;time&#34; ) type Server struct { tk *time.Ticker reset chan struct{} Close chan struct{} Period int64 } func main() { s := CreateServer(1) go s.Start() time.Sleep(time.Duration(10) * time.Second) s.Update(3) time.Sleep(time.Duration(10) * time.Second) s.Stop() fmt.Println(&#34;good bye&#34;) } func CreateServer(Period int64) *Server { return &amp;Server{ tk: nil, reset: make(chan struct{}), Close: make(chan struct{}), Period: Period, } } // 程序启动 func (s *Server) Start() { // 定时 	s." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://golang.coding3min.com/a.timer/reset/readme/" /><meta property="article:section" content="a.timer" />
+<meta property="og:url" content="https://golang.coding3min.com/a.timer/reset/reset-time/" /><meta property="article:section" content="a.timer" />
 <meta property="article:published_time" content="2021-06-26T02:39:47&#43;08:00" />
-<meta property="article:modified_time" content="2021-06-26T13:08:03&#43;08:00" />
+<meta property="article:modified_time" content="2021-06-26T02:39:47&#43;08:00" />
 
 <title>可热更新的定时器 | go语言精进之路</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.f6c3309e53963145f9a04d3c5cff73ad547b0cc0ec188046ec3a5ceb75814ea7.js" integrity="sha256-9sMwnlOWMUX5oE08XP9zrVR7DMDsGIBG7Dpc63WBTqc=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.f5653653434fac73aa8d1cd046b8b2fa2ce8221a20e086faabf08e2b1464925a.js" integrity="sha256-9WU2U0NPrHOqjRzQRriy&#43;izoIhog4Ib6q/COKxRkklo=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -28,13 +28,13 @@ https://github.com/alex-shpak/hugo-book
   
 </head>
 <body dir="ltr">
-  <input type="checkbox" class="hidden toggle" id="menu-control" />
-  <input type="checkbox" class="hidden toggle" id="toc-control" />
-  <main class="container flex">
-    <aside class="book-menu">
-      <div class="book-menu-content">
-        
-  <nav>
+<input type="checkbox" class="hidden toggle" id="menu-control" />
+<input type="checkbox" class="hidden toggle" id="toc-control" />
+<main class="container flex">
+  <aside class="book-menu">
+    <div class="book-menu-content">
+      
+<nav>
 <h2 class="book-brand">
   <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
   </a>
@@ -131,7 +131,7 @@ https://github.com/alex-shpak/hugo-book
 <li><strong>时间处理与定时任务</strong>
 <ul>
 <li>
-  <a href="/a.timer/reset/readme/"class=active>设置可热更新的定时器</a></li>
+  <a href="/a.timer/reset/reset-time/"class=active>设置可热更新的定时器</a></li>
 </ul>
 </li>
 <li><strong>常用操作</strong>
@@ -178,18 +178,18 @@ https://github.com/alex-shpak/hugo-book
 
 
  
-      </div>
-    </aside>
+    </div>
+  </aside>
 
-    <div class="book-page">
-      <header class="book-header">
-        
+  <div class="book-page">
+    <header class="book-header">
+      
 
  
-      </header>
+    </header>
 
-      
-      
+    
+    
 <main class="site-main section-inner thin animated fadeIn faster">
   <h1>可热更新的定时器</h1>
   <div class="content">
@@ -262,6 +262,11 @@ https://github.com/alex-shpak/hugo-book
 
 </code></pre></div>
   </div>
+  <div class="book-footer justify-between"></div>
+  <hr style="height: 1px;
+    background: var(--gray-200);">
+  <br>
+  <p>本图书由<a href="https://github.com/minibear2333">小熊</a>©2021 版权所有，<a href="https://golang.coding3min.com/">所有文章</a>采用<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh">知识署名-非商业性使用-禁止演绎 4.0 国际</a>进行许可。</p>
   <div id="comments" class="thin">
     <script src="https://utteranc.es/client.js"
         repo="minibear2333/blog-comment"
@@ -273,40 +278,39 @@ https://github.com/alex-shpak/hugo-book
   </div>
 </main>
  
+    
+
+    <footer class="book-footer">
       
 
-      <footer class="book-footer">
-        
-本图书由 [机智的程序员小熊](https://github.com/minibear2333/) ©2021 版权所有，[所有文章](https://golang.coding3min.com)采用 [知识署名-非商业性使用-禁止演绎 4.0 国际](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh) 进行许可。
  
-        
-      </footer>
-
       
-  
- 
-
-      <label for="menu-control" class="hidden book-menu-overlay"></label>
-    </div>
+    </footer>
 
     
-    <aside class="book-toc">
-      <div class="book-toc-content">
-        
+
+ 
+
+    <label for="menu-control" class="hidden book-menu-overlay"></label>
+  </div>
+
   
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+
 <nav id="TableOfContents"></nav>
 
 
  
-      </div>
-    </aside>
-    
-  </main>
-
+    </div>
+  </aside>
   
+</main>
+
+
 </body>
 </html>
-
 
 
 

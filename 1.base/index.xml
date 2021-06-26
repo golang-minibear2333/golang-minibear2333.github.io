@@ -5,24 +5,12 @@
     <link>https://golang.coding3min.com/1.base/</link>
     <description>Recent content in 1.bases on go语言精进之路</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://golang.coding3min.com/1.base/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sat, 26 Jun 2021 02:39:47 +0800</lastBuildDate><atom:link href="https://golang.coding3min.com/1.base/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title></title>
-      <link>https://golang.coding3min.com/1.base/1-1-install-download/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://golang.coding3min.com/1.base/1-1-install-download/</guid>
-      <description>1.1 安装和下载 #  1.1.1 下载位置 #   go语言中文网
-1.1.2 如何安装 #  为你的系统下载了相应的安装包后，请按照 安装说明 进行安装。
-如果你选择从源码构建，请参考 从源码进行安装 。
-查看 发布历史 了解更多关于 Go 各版本的发布说明。
-1.1.3 小结 #  安装其实很容易，如果出现什么安装问题欢迎留言</description>
-    </item>
-    
-    <item>
-      <title></title>
+      <title>可热更新的定时器</title>
       <link>https://golang.coding3min.com/1.base/1-2-hello-world/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 26 Jun 2021 02:39:47 +0800</pubDate>
       
       <guid>https://golang.coding3min.com/1.base/1-2-hello-world/</guid>
       <description>1.2.1 hello world #  Go 语言是谷歌 2009 发布的第二款开源编程语言。
@@ -35,6 +23,19 @@ Go 语言专门针对多处理器系统应用程序的编程进行了优化，�
 6、部署方便：二进制文件、Copy 部署我相信这一点是很多人选择 Go 的最大理由，因为部署太方便了，所以现在也有很多人用 Go 开发运维程序。
 7、简单的并发它包含了降低心智的并发和简易的数据同步，我觉得这是 Go 最大的特色。之所以写正确的并发、容错和可扩展的程序如此之难，是因为我们用了错误的工具和错误的抽象，Go 可以说这一块做的相当简单。
 8、稳定性 Go 拥有强大的编译检查、严格的编码规范和完整的软件生命周期工具，具有很强的稳定性，稳定压倒一切。那么为什么 Go 相比于其他程序会更稳定呢？这是因为 Go 提供了软件生命周期（开发、测试、部署、维护等等）的各个环节的工具，如 go tool、gofmt、go test。</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/1.base/1-1-install-download/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/1.base/1-1-install-download/</guid>
+      <description>1.1 安装和下载 #  1.1.1 下载位置 #   go语言中文网
+1.1.2 如何安装 #  为你的系统下载了相应的安装包后，请按照 安装说明 进行安装。
+如果你选择从源码构建，请参考 从源码进行安装 。
+查看 发布历史 了解更多关于 Go 各版本的发布说明。
+1.1.3 小结 #  安装其实很容易，如果出现什么安装问题欢迎留言</description>
     </item>
     
     <item>

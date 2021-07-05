@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Go语言精进之路 #  大家好，我是小熊，本书基于Go语言版本 1.16 版本，后续可能会再调整，目录也还未明确，正在努力持续更新中，整体进度未明。
-如果对这个项目感兴趣，请点击一下 Star ，项目会 持续更新，感谢大家的支持。
+ 如果对这个项目感兴趣，请点击一下 &ndash;&gt; Star ，项目会 持续更新，感谢大家的支持。
   电子书见 -&gt; Go语言精进之路-在线电子书 实战项目见 -&gt; Golang实战练习库  语法速查   学习与交流 #   哪有那么多人生开挂，不过都是厚积薄发 。 我的个人网站: https://coding3min.com 我用Golang 刷 算法的项目  基本会先更新在公众号，再同步到站点上。若想一起学习，欢迎加我的微信：qupzhi。
 也可以关注公众号：
  本书定位 #  本书给快速入门学习Go语言使用。更偏向于实战，计划扫清Go语言一切障碍，包括Go语言实战、Go语言并发，也希望能给学习Golang 的你一些帮助。
@@ -13,8 +13,7 @@
 面向群体 #   有一定其他语言基础的 Go 语言爱好者 后端、云计算、安全等领域工作涉及到 Go 语言的工程师 想要进一步熟悉掌握Go并发、以及探索 Go 语言框架、开源项目的开发人员  为什么要写这本书 #  我的职业生涯非常丰富，做过研发、实施运维、架构的工作，数年前我学习过Java，接着从事C&#43;&#43;开发的工作、后来工作中陆续接触过 C#、Python、Golang，目前专注于Golang研发。
 虽然网上有很多入门与实战方面的书籍，但我想总结一下我工作或学习过程中接触到的知识，以供查阅。
 关于版权 #  本书可能会借鉴其他书籍资料，一起网络图片，本书不作为商业用途，仅供学习交流，所借鉴内容来源于网络，会在文章末尾处标记引用位置。如源文章标记禁止引用则不会引用。
-因本书开源社区共同维护，难以控制，如有侵权，请留言提出，会在第一时间做出调整修改。
-批评和建议 #  如果有任何建议或疑问欢迎随时在本书的评论区与我交流，会尽量在 1-2 天内回复你。">
+因本书开源社区共同维护，难以控制，如有侵权，请留言提出，会在第一时间做出调整修改。">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
@@ -25,7 +24,7 @@
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.fa947d21832c3147e06ed5e77ace88590655cdbd88585c700f97e1f701807227.js" integrity="sha256-&#43;pR9IYMsMUfgbtXnes6IWQZVzb2IWFxwD5fh9wGAcic=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.9f0e76093f29dca84018a2f0998bb8654ea087da55813fbda732469b93743f14.js" integrity="sha256-nw52CT8p3KhAGKLwmYu4ZU6gh9pVgT&#43;9pzJGm5N0PxQ=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <link rel="alternate" type="application/rss+xml" href="https://golang.coding3min.com/index.xml" title="go语言精进之路" />
@@ -143,7 +142,6 @@ https://github.com/alex-shpak/hugo-book
 <li>消费者生产者框架</li>
 </ul>
 </li>
-<li><strong>第x章、反射</strong></li>
 <li><strong>第五章、性能调优</strong>
 <ul>
 <li>cpu调度</li>
@@ -178,7 +176,8 @@ https://github.com/alex-shpak/hugo-book
 <li>跨平台编译</li>
 </ul>
 </li>
-<li><strong>第八章、优秀开源组件</strong>
+<li><strong>第八章、反射</strong></li>
+<li><strong>第九章、优秀开源组件</strong>
 <ul>
 <li>日志</li>
 <li>配置管理</li>
@@ -211,6 +210,12 @@ https://github.com/alex-shpak/hugo-book
 <ul>
 <li>
   <a href="/impossible/range/readme/">range的第二个值实际上是值拷贝</a></li>
+<li>
+  <a href="/impossible/%E6%96%B0%E6%89%8B%E5%B8%B8%E7%8A%AF%E7%9A%84%E9%94%99%E8%AF%AF/">新手常犯的错误</a></li>
+<li>
+  <a href="/impossible/%E5%88%9D%E5%AD%A6%E8%80%85%E5%B8%B8%E7%8A%AF%E7%9A%84%E9%94%99%E8%AF%AF/">初学者常犯的错误</a></li>
+<li>
+  <a href="/impossible/%E8%BF%9B%E9%98%B6%E5%B8%B8%E7%8A%AF%E7%9A%84%E9%94%99%E8%AF%AF/">进阶常犯的错误</a></li>
 </ul>
 </li>
 </ul>
@@ -283,7 +288,13 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#go%e8%af%ad%e8%a8%80%e7%b2%be%e8%bf%9b%e4%b9%8b%e8%b7%af">#</a>
 </h1>
 <p>大家好，我是小熊，本书基于Go语言版本 <code>1.16</code> 版本，后续可能会再调整，目录也还未明确，正在<strong>努力持续更新中</strong>，整体进度未明。</p>
-<p>如果对这个项目感兴趣，请点击一下 
+<p>
+  <img src="https://img.shields.io/github/watchers/golang-minibear2333/golang.svg" alt="" />
+
+  <img src="https://img.shields.io/github/stars/golang-minibear2333/golang.svg" alt="" />
+
+  <img src="https://img.shields.io/github/forks/golang-minibear2333/golang.svg" alt="" /></p>
+<p>如果对这个项目感兴趣，请点击一下 &ndash;&gt;  
   <a href="https://github.com/golang-minibear2333/golang"><strong>Star</strong></a> ，项目会 <strong>持续更新</strong>，感谢大家的支持。</p>
 <hr>
 <ul>

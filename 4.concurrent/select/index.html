@@ -20,7 +20,7 @@ func main() { c1 := make(chan string) c2 := make(chan string) go func() { time.S
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.9f0e76093f29dca84018a2f0998bb8654ea087da55813fbda732469b93743f14.js" integrity="sha256-nw52CT8p3KhAGKLwmYu4ZU6gh9pVgT&#43;9pzJGm5N0PxQ=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.426848a39d85ccdbbe1f3623bc92e739c9bfa5c2fa44bc98792e085fa15402e2.js" integrity="sha256-QmhIo52FzNu&#43;HzYjvJLnOcm/pcL6RLyYeS4IX6FUAuI=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -132,64 +132,71 @@ https://github.com/alex-shpak/hugo-book
   <a href="/a.timer/reset/reset-time/">设置可热更新的定时器</a></li>
 <li>
   <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">goroutine等待</a></li>
-<li>并发安全</li>
-<li>协程池</li>
-<li>消费者生产者框架</li>
+<li>-并发安全</li>
+<li>-协程池</li>
+<li>-消费者生产者框架</li>
 </ul>
 </li>
-<li><strong>第五章、性能调优</strong>
-<ul>
-<li>cpu调度</li>
-<li>内存管理</li>
-<li>垃圾回收</li>
-<li>PProf</li>
-<li>逃逸分析</li>
-<li>链路追踪</li>
-<li>自监控</li>
-</ul>
-</li>
-<li><strong>第六章、调试与测试</strong>
-<ul>
-<li>调试</li>
-<li>单元测试</li>
-<li>mock</li>
-<li>自动化测试</li>
-</ul>
-</li>
-<li><strong>第七章、标准库</strong>
+<li><strong>第五章、标准库</strong>
 <ul>
 <li>
   <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">Go代码基本标准规范</a></li>
-<li>时间处理</li>
-<li>字符串处理</li>
 <li>
   <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">文件操作</a></li>
 <li>
   <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/">排序</a></li>
 <li>
   <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/">命令行操作</a></li>
+<li>-时间处理</li>
+<li>-字符串处理</li>
+<li>-json库</li>
+<li>-http库</li>
 <li>跨平台编译</li>
+</ul>
+</li>
+<li><strong>第六章、性能调优</strong>
+<ul>
+<li>-cpu调度</li>
+<li>-内存管理</li>
+<li>-垃圾回收</li>
+<li>-PProf</li>
+<li>-逃逸分析</li>
+<li>-链路追踪</li>
+<li>-自监控</li>
+</ul>
+</li>
+<li><strong>第七章、调试与测试</strong>
+<ul>
+<li>-调试</li>
+<li>-单元测试</li>
+<li>-mock</li>
+<li>-自动化测试</li>
 </ul>
 </li>
 <li><strong>第八章、反射</strong></li>
 <li><strong>第九章、优秀开源组件</strong>
 <ul>
-<li>日志</li>
-<li>配置管理</li>
-<li>接口文档</li>
-<li>错误码控制</li>
-<li>数据库连接</li>
-<li>为开源项目贡献代码</li>
+<li>-日志</li>
+<li>-配置管理</li>
+<li>-接口文档</li>
+<li>-错误码控制</li>
+<li>-数据库连接</li>
+<li>-为开源项目贡献代码</li>
 </ul>
 </li>
 <li><strong>第十章、分布式系统</strong>
 <ul>
-<li>分布式ID生成器</li>
-<li>分布式锁</li>
-<li>分布式一致性算法</li>
+<li>-分布式ID生成器</li>
+<li>-分布式锁</li>
+<li>-分布式一致性算法</li>
 </ul>
 </li>
-<li><strong>第x章、web应用</strong></li>
+<li><strong>第x章、web应用</strong>
+<ul>
+<li>-GRPC</li>
+<li>-Protobuf</li>
+</ul>
+</li>
 <li><strong>第x章、微服务</strong></li>
 <li><strong>第x章、服务治理</strong></li>
 <li><strong>第x章、GO语言版本分析</strong></li>

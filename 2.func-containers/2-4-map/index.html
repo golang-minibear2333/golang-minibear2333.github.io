@@ -34,7 +34,7 @@ delete(m, &#34;name&#34;) PS: 在取值的时候m[key]，假如key不存在，�
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b1a40f32a4547031f4a3870ac13fcb8422b456a06543d385e225dfb4182cafed.js" integrity="sha256-saQPMqRUcDH0o4cKwT/LhCK0VqBlQ9OF4iXftBgsr&#43;0=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.0397f4eac9a9082e0bd4186934c0571b8d5a6789854ed5c8befce33d79d4f005.js" integrity="sha256-A5f06smpCC4L1BhpNMBXG41aZ4mFTtXIvvzjPXnU8AU=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -282,11 +282,8 @@ https://github.com/alex-shpak/hugo-book
 <nav id="TableOfContents">
   <ul>
     <li><a href="#241-映射关系容器-map">2.4.1 映射关系容器 map</a></li>
-    <li><a href="#242-使用">2.4.2 使用</a>
-      <ul>
-        <li><a href="#243-map-内部元素的修改">2.4.3 map 内部元素的修改</a></li>
-      </ul>
-    </li>
+    <li><a href="#242-使用">2.4.2 使用</a></li>
+    <li><a href="#243-map-内部元素的修改">2.4.3 map 内部元素的修改</a></li>
     <li><a href="#244-能够在并发环境中使用的map">2.4.4 能够在并发环境中使用的<code>map</code></a></li>
     <li><a href="#245-小结">2.4.5 小结</a></li>
   </ul>
@@ -343,10 +340,10 @@ https://github.com/alex-shpak/hugo-book
 	} <span style="color:#66d9ef">else</span> {
 		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">key</span>, <span style="color:#e6db74">&#34; 不存在&#34;</span>)
 	}
-</code></pre></div><h3 id="243-map-内部元素的修改">
+</code></pre></div><h2 id="243-map-内部元素的修改">
   2.4.3 map 内部元素的修改
   <a class="anchor" href="#243-map-%e5%86%85%e9%83%a8%e5%85%83%e7%b4%a0%e7%9a%84%e4%bf%ae%e6%94%b9">#</a>
-</h3>
+</h2>
 <p>map 可以拷贝吗？</p>
 <p><code>map</code> 其实是不能拷贝的，如果想要拷贝一个 <code>map</code> ，只有一种办法就是循环赋值，就像这样</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">originalMap</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">int</span>)
@@ -380,7 +377,7 @@ https://github.com/alex-shpak/hugo-book
 <span style="color:#a6e22e">originalMap</span>[<span style="color:#e6db74">&#34;minibear2333&#34;</span>] = <span style="color:#a6e22e">Person</span>{<span style="color:#a6e22e">age</span>: <span style="color:#ae81ff">26</span>}
 <span style="color:#a6e22e">originalMap</span>[<span style="color:#e6db74">&#34;minibear2333&#34;</span>].<span style="color:#a6e22e">age</span> = <span style="color:#ae81ff">5</span>
 </code></pre></div><p>你可以 
-  <a href="https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.4-map/map1.go">试下源码函数 updateMapValue</a> ，会报这个错误</p>
+  <a href="https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.4-map/map1.go#L89">试下源码函数 updateMapValue</a> ，会报这个错误</p>
 <blockquote>
 <p>Cannot assign to originalMap[&ldquo;minibear2333&rdquo;].age</p>
 </blockquote>
@@ -497,11 +494,8 @@ https://github.com/alex-shpak/hugo-book
 <nav id="TableOfContents">
   <ul>
     <li><a href="#241-映射关系容器-map">2.4.1 映射关系容器 map</a></li>
-    <li><a href="#242-使用">2.4.2 使用</a>
-      <ul>
-        <li><a href="#243-map-内部元素的修改">2.4.3 map 内部元素的修改</a></li>
-      </ul>
-    </li>
+    <li><a href="#242-使用">2.4.2 使用</a></li>
+    <li><a href="#243-map-内部元素的修改">2.4.3 map 内部元素的修改</a></li>
     <li><a href="#244-能够在并发环境中使用的map">2.4.4 能够在并发环境中使用的<code>map</code></a></li>
     <li><a href="#245-小结">2.4.5 小结</a></li>
   </ul>

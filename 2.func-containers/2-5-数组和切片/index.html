@@ -24,7 +24,7 @@ int* a = (int *)malloc(10); int* b = new int(4); 此时，a和b的类型也是in
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.b1a40f32a4547031f4a3870ac13fcb8422b456a06543d385e225dfb4182cafed.js" integrity="sha256-saQPMqRUcDH0o4cKwT/LhCK0VqBlQ9OF4iXftBgsr&#43;0=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.0397f4eac9a9082e0bd4186934c0571b8d5a6789854ed5c8befce33d79d4f005.js" integrity="sha256-A5f06smpCC4L1BhpNMBXG41aZ4mFTtXIvvzjPXnU8AU=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -408,6 +408,25 @@ https://github.com/alex-shpak/hugo-book
 </span></code></pre></div><p>切片还有一种方式复制方式，比较快速</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">slice3</span> <span style="color:#f92672">:=</span>  <span style="color:#a6e22e">slice2</span>[:]
 </code></pre></div><p>但是有一种致命的缺点，这是浅拷贝，<code>slice3</code>和<code>slice2</code>是同一个切片，无论改动哪个，另一个都会产生变化。</p>
+<p>可能这么说你还是不能加深理解。在源码 
+  <a href="https://github.com/golang/go/blob/cb4cd9e17753b5cd8ee4cd5b1f23d46241b485f1/src/bytes/buffer.go#L54">bytes.buffer</a> 中出现了这一段</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Buffer</span>) <span style="color:#a6e22e">Bytes</span>() []<span style="color:#66d9ef">byte</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">buf</span>[<span style="color:#a6e22e">b</span>.<span style="color:#a6e22e">off</span>:] 
+}
+</code></pre></div><p>我们在读入读出输入流的时候，极易出现这样的问题</p>
+<p>下面的例子，使用<code>abc</code>模拟读入内容，修改返回值内容</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">	<span style="color:#a6e22e">buffer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">bytes</span>.<span style="color:#a6e22e">NewBuffer</span>(make([]<span style="color:#66d9ef">byte</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">100</span>))
+	<span style="color:#a6e22e">buffer</span>.<span style="color:#a6e22e">Write</span>([]byte(<span style="color:#e6db74">&#34;abc&#34;</span>))
+	<span style="color:#a6e22e">resBytes</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">buffer</span>.<span style="color:#a6e22e">Bytes</span>()
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%s \n&#34;</span>, <span style="color:#a6e22e">resBytes</span>)
+	<span style="color:#a6e22e">resBytes</span>[<span style="color:#ae81ff">0</span>] = <span style="color:#e6db74">&#39;d&#39;</span>
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%s \n&#34;</span>, <span style="color:#a6e22e">resBytes</span>)
+	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%s \n&#34;</span>, <span style="color:#a6e22e">buffer</span>.<span style="color:#a6e22e">Bytes</span>())
+</code></pre></div><p>输出，可以看出会影响到原切片内容</p>
+<pre><code>abc
+dbc
+dbc
+</code></pre><p>这种情况在并发使用的时候尤为危险，特别是流式读写的时候容易出现上一次没处理完成，下一次的数据覆盖写入的错乱情况</p>
 <h2 id="257-截取部分元素">
   2.5.7 截取部分元素
   <a class="anchor" href="#257-%e6%88%aa%e5%8f%96%e9%83%a8%e5%88%86%e5%85%83%e7%b4%a0">#</a>

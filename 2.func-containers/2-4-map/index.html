@@ -34,7 +34,7 @@ delete(m, &#34;name&#34;) PS: 在取值的时候m[key]，假如key不存在，�
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.426848a39d85ccdbbe1f3623bc92e739c9bfa5c2fa44bc98792e085fa15402e2.js" integrity="sha256-QmhIo52FzNu&#43;HzYjvJLnOcm/pcL6RLyYeS4IX6FUAuI=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.b1a40f32a4547031f4a3870ac13fcb8422b456a06543d385e225dfb4182cafed.js" integrity="sha256-saQPMqRUcDH0o4cKwT/LhCK0VqBlQ9OF4iXftBgsr&#43;0=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -282,9 +282,13 @@ https://github.com/alex-shpak/hugo-book
 <nav id="TableOfContents">
   <ul>
     <li><a href="#241-映射关系容器-map">2.4.1 映射关系容器 map</a></li>
-    <li><a href="#242-使用">2.4.2 使用</a></li>
-    <li><a href="#243-能够在并发环境中使用的map">2.4.3 能够在并发环境中使用的<code>map</code></a></li>
-    <li><a href="#244-小结">2.4.4 小结</a></li>
+    <li><a href="#242-使用">2.4.2 使用</a>
+      <ul>
+        <li><a href="#243-map-内部元素的修改">2.4.3 map 内部元素的修改</a></li>
+      </ul>
+    </li>
+    <li><a href="#244-能够在并发环境中使用的map">2.4.4 能够在并发环境中使用的<code>map</code></a></li>
+    <li><a href="#245-小结">2.4.5 小结</a></li>
   </ul>
 </nav>
 
@@ -339,10 +343,68 @@ https://github.com/alex-shpak/hugo-book
 	} <span style="color:#66d9ef">else</span> {
 		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">key</span>, <span style="color:#e6db74">&#34; 不存在&#34;</span>)
 	}
-</code></pre></div><p>map容器就到这里了。</p>
-<h2 id="243-能够在并发环境中使用的map">
-  2.4.3 能够在并发环境中使用的<code>map</code>
-  <a class="anchor" href="#243-%e8%83%bd%e5%a4%9f%e5%9c%a8%e5%b9%b6%e5%8f%91%e7%8e%af%e5%a2%83%e4%b8%ad%e4%bd%bf%e7%94%a8%e7%9a%84map">#</a>
+</code></pre></div><h3 id="243-map-内部元素的修改">
+  2.4.3 map 内部元素的修改
+  <a class="anchor" href="#243-map-%e5%86%85%e9%83%a8%e5%85%83%e7%b4%a0%e7%9a%84%e4%bf%ae%e6%94%b9">#</a>
+</h3>
+<p>map 可以拷贝吗？</p>
+<p><code>map</code> 其实是不能拷贝的，如果想要拷贝一个 <code>map</code> ，只有一种办法就是循环赋值，就像这样</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">originalMap</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">int</span>)
+<span style="color:#a6e22e">originalMap</span>[<span style="color:#e6db74">&#34;one&#34;</span>] = <span style="color:#ae81ff">1</span>
+<span style="color:#a6e22e">originalMap</span>[<span style="color:#e6db74">&#34;two&#34;</span>] = <span style="color:#ae81ff">2</span>
+
+<span style="color:#75715e">// Create the target map
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">targetMap</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">int</span>)
+
+<span style="color:#75715e">// Copy from the original map to the target map
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">value</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">originalMap</span> {
+    <span style="color:#a6e22e">targetMap</span>[<span style="color:#a6e22e">key</span>] = <span style="color:#a6e22e">value</span>
+}
+</code></pre></div><p>如果 <code>map</code> 中有指针，还要考虑深拷贝的过程</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">originalMap</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">num</span> <span style="color:#66d9ef">int</span> = <span style="color:#ae81ff">1</span>
+<span style="color:#a6e22e">originalMap</span>[<span style="color:#e6db74">&#34;one&#34;</span>] = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">num</span>
+
+<span style="color:#75715e">// Create the target map
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">targetMap</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#f92672">*</span><span style="color:#66d9ef">int</span>)
+
+<span style="color:#75715e">// Copy from the original map to the target map
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">for</span> <span style="color:#a6e22e">key</span>, <span style="color:#a6e22e">value</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">originalMap</span> {
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tmpNum</span> <span style="color:#66d9ef">int</span> = <span style="color:#f92672">*</span><span style="color:#a6e22e">value</span>
+    <span style="color:#a6e22e">targetMap</span>[<span style="color:#a6e22e">key</span>] = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">tmpNum</span>
+}
+</code></pre></div><p>如果想要更新 <code>map</code> 中的<code>value</code>，可以通过赋值来进行操作</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">map</span>[<span style="color:#e6db74">&#34;one&#34;</span>] = <span style="color:#ae81ff">1</span>
+</code></pre></div><p>但如果 <code>value</code> 是一个结构体，可以直接替换结构体，但无法更新结构体内部的值</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">originalMap</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#a6e22e">Person</span>)
+<span style="color:#a6e22e">originalMap</span>[<span style="color:#e6db74">&#34;minibear2333&#34;</span>] = <span style="color:#a6e22e">Person</span>{<span style="color:#a6e22e">age</span>: <span style="color:#ae81ff">26</span>}
+<span style="color:#a6e22e">originalMap</span>[<span style="color:#e6db74">&#34;minibear2333&#34;</span>].<span style="color:#a6e22e">age</span> = <span style="color:#ae81ff">5</span>
+</code></pre></div><p>你可以 
+  <a href="https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.4-map/map1.go">试下源码函数 updateMapValue</a> ，会报这个错误</p>
+<blockquote>
+<p>Cannot assign to originalMap[&ldquo;minibear2333&rdquo;].age</p>
+</blockquote>
+<p>问题链接 
+  <a href="https://github.com/golang/go/issues/3117">issue-3117</a> , 其中 
+  <a href="https://github.com/golang/go/issues/3117#issuecomment-430632750">ianlancetaylor</a> 的回答很好的解释了这一点</p>
+<p>简单来说就是map不是一个并发安全的结构，所以，并不能修改他在结构体中的值。</p>
+<p>这如果目前的形式不能修改的话，就面临两种选择，</p>
+<ul>
+<li>1.修改原来的设计;</li>
+<li>2.想办法让map中的成员变量可以修改，</li>
+</ul>
+<p>因为懒得该这个结构体，就选择了方法2</p>
+<p>要么创建个临时变量，做拷贝，像这样</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">tmp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">m</span>[<span style="color:#e6db74">&#34;foo&#34;</span>]
+<span style="color:#a6e22e">tmp</span>.<span style="color:#a6e22e">x</span> = <span style="color:#ae81ff">4</span>
+<span style="color:#a6e22e">m</span>[<span style="color:#e6db74">&#34;foo&#34;</span>] = <span style="color:#a6e22e">tmp</span>
+</code></pre></div><p>要么直接用指针，比较方便</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">originalPointMap</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#f92672">*</span><span style="color:#a6e22e">Person</span>)
+<span style="color:#a6e22e">originalPointMap</span>[<span style="color:#e6db74">&#34;minibear2333&#34;</span>] = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Person</span>{<span style="color:#a6e22e">age</span>: <span style="color:#ae81ff">26</span>}
+<span style="color:#a6e22e">originalPointMap</span>[<span style="color:#e6db74">&#34;minibear2333&#34;</span>].<span style="color:#a6e22e">age</span> = <span style="color:#ae81ff">5</span>
+</code></pre></div><h2 id="244-能够在并发环境中使用的map">
+  2.4.4 能够在并发环境中使用的<code>map</code>
+  <a class="anchor" href="#244-%e8%83%bd%e5%a4%9f%e5%9c%a8%e5%b9%b6%e5%8f%91%e7%8e%af%e5%a2%83%e4%b8%ad%e4%bd%bf%e7%94%a8%e7%9a%84map">#</a>
 </h2>
 <p><code>Go</code>中的<code>map</code>在并发读的时候没问题，但是并发写就不行了（线程不安全），会发生竞态问题。</p>
 <p>所以有一个叫<code>sync.Map</code>的封装数据结构供大家使用，简单用法如下：
@@ -371,11 +433,11 @@ https://github.com/alex-shpak/hugo-book
 		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;key:&#34;</span>,<span style="color:#a6e22e">key</span>,<span style="color:#e6db74">&#34;,value:&#34;</span>,<span style="color:#a6e22e">value</span>)
 		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
 	})
-</code></pre></div><h2 id="244-小结">
-  2.4.4 小结
-  <a class="anchor" href="#244-%e5%b0%8f%e7%bb%93">#</a>
+</code></pre></div><h2 id="245-小结">
+  2.4.5 小结
+  <a class="anchor" href="#245-%e5%b0%8f%e7%bb%93">#</a>
 </h2>
-<p>本节介绍了字典<code>map</code>类型，这种类型在很多语言中都有，并且学习了它的增加删除元素的方法。</p>
+<p>本节介绍了字典<code>map</code>类型，这种类型在很多语言中都有，并且学习了它的增加删除元素的方法，以及更新value要注意的点。</p>
 <p>还介绍了并发环境下使用的线程安全的 <code>sync.Map</code>。</p>
 </article>
  
@@ -435,9 +497,13 @@ https://github.com/alex-shpak/hugo-book
 <nav id="TableOfContents">
   <ul>
     <li><a href="#241-映射关系容器-map">2.4.1 映射关系容器 map</a></li>
-    <li><a href="#242-使用">2.4.2 使用</a></li>
-    <li><a href="#243-能够在并发环境中使用的map">2.4.3 能够在并发环境中使用的<code>map</code></a></li>
-    <li><a href="#244-小结">2.4.4 小结</a></li>
+    <li><a href="#242-使用">2.4.2 使用</a>
+      <ul>
+        <li><a href="#243-map-内部元素的修改">2.4.3 map 内部元素的修改</a></li>
+      </ul>
+    </li>
+    <li><a href="#244-能够在并发环境中使用的map">2.4.4 能够在并发环境中使用的<code>map</code></a></li>
+    <li><a href="#245-小结">2.4.5 小结</a></li>
   </ul>
 </nav>
 

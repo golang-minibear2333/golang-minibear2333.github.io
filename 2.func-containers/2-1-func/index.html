@@ -38,7 +38,7 @@ func functionParam(num int) { } 当然了，可以有多个形参，类型相同
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.0397f4eac9a9082e0bd4186934c0571b8d5a6789854ed5c8befce33d79d4f005.js" integrity="sha256-A5f06smpCC4L1BhpNMBXG41aZ4mFTtXIvvzjPXnU8AU=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.2f57942ed2e6291f61a821160e46380c99fa394c1b31af39411d3012e36308cc.js" integrity="sha256-L1eULtLmKR9hqCEWDkY4DJn6OUwbMa85QR0wEuNjCMw=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -408,7 +408,7 @@ go_class.go
   2.1.4 函数进阶
   <a class="anchor" href="#214-%e5%87%bd%e6%95%b0%e8%bf%9b%e9%98%b6">#</a>
 </h2>
-<p>上面说的东西都很简单了，基本学过任何一门语言的人都能瞬间看懂，和<code>python</code>、<code>c++</code>、<code>javascript</code>一样，<code>go</code>中也有把函数打作参数传递的语法。</p>
+<p>上面说的东西都很简单了，基本学过任何一门语言的人都能瞬间看懂，和<code>python</code>、<code>c++</code>、<code>javascript</code>一样，<code>go</code>中也有把函数当作参数传递的语法。</p>
 <p>像这样，<code>functionValue</code>函数的形参里有一个名为<code>do</code>的函数，需要提前指定<code>do</code>函数有什么参数和返回值。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">functionValue</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">do</span> <span style="color:#66d9ef">func</span>(<span style="color:#66d9ef">int</span>, <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span>) {
 	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">do</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span>))
@@ -437,16 +437,21 @@ go_class.go
   <a class="anchor" href="#215-%e5%ae%9e%e9%99%85%e7%9a%84%e4%bd%bf%e7%94%a8">#</a>
 </h2>
 <p>你可以参考函数测速例子</p>
+<blockquote>
+<p>源码位置：https://github.com/golang-minibear2333/golang/blob/master/2.func-containers/2.1-func/append_string.go</p>
+</blockquote>
 <p>定义一个测速函数。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">speedTime</span>(<span style="color:#a6e22e">handler</span> <span style="color:#66d9ef">func</span>() (<span style="color:#66d9ef">string</span>), <span style="color:#a6e22e">funcName</span> <span style="color:#66d9ef">string</span>) {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">speedTime</span>(<span style="color:#a6e22e">handler</span> <span style="color:#66d9ef">func</span>() (<span style="color:#66d9ef">string</span>) {
 	<span style="color:#a6e22e">t</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>()
 	<span style="color:#a6e22e">handler</span>()
 	<span style="color:#a6e22e">elapsed</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Since</span>(<span style="color:#a6e22e">t</span>)
+	<span style="color:#75715e">// 利用反射获得函数名
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">funcName</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">runtime</span>.<span style="color:#a6e22e">FuncForPC</span>(<span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">ValueOf</span>(<span style="color:#a6e22e">handler</span>).<span style="color:#a6e22e">Pointer</span>()).<span style="color:#a6e22e">Name</span>()
 	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">funcName</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34;spend time:&#34;</span>, <span style="color:#a6e22e">elapsed</span>)
 }
 </code></pre></div><p>传入不同的函数都可以测速度。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">speedTime</span>(<span style="color:#a6e22e">appendStr</span>, <span style="color:#e6db74">&#34;appendStr&#34;</span>)
-<span style="color:#a6e22e">speedTime</span>(<span style="color:#a6e22e">appendStrQuick</span>, <span style="color:#e6db74">&#34;appendStrQuick&#34;</span>)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">speedTime</span>(<span style="color:#a6e22e">appendStr</span>)
+<span style="color:#a6e22e">speedTime</span>(<span style="color:#a6e22e">appendStrQuick</span>)
 </code></pre></div><p>小<code>Tips</code>：</p>
 <ul>
 <li>还有你可以传filter函数做过滤，mapping做映射等实际的用法</li>

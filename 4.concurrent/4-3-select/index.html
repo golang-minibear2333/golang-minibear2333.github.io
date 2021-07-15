@@ -3,24 +3,32 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="select #  select 用于处理异步 IO 问题，它的语法与 switch 非常类似。由 select 开始一个新的选择块，每个选择条件由 case 语句来描述，并且每个 case 语句里必须是一个 channel 操作。它既可以用于 channel 的数据接收，也可以用于 channel 的数据发送。如果 select 的多个分支都满足条件，则会随机的选取其中一个满足条件的分支。
+<meta name="description" content="4.3 select #  &hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go
+ 4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
+内部可以是值，也可以是表达式，如果switch后未接参数，就必须是已有变量的表达式。
+switch number{ case number &gt;= 90: fmt.Println(&#34;优秀&#34;) case number &gt;= 80: fmt.Println(&#34;良好&#34;) case number &gt;= 60: fmt.Println(&#34;凑合&#34;) default: fmt.Println(&#34;太搓了&#34;) } 而 select 用于处理异步 IO 问题，它的语法与 switch 非常类似。
+4.3.2 select #  由 select 开始一个新的选择块，每个选择条件由 case 语句来描述，并且每个 case 语句里必须是一个 channel 操作。它既可以用于 channel 的数据接收，也可以用于 channel 的数据发送。如果 select 的多个分支都满足条件，则会随机的选取其中一个满足条件的分支。
 新建源文件 channel.go，输入以下代码：
-func main() { c1 := make(chan string) c2 := make(chan string) go func() { time.Sleep(time.Second * 1) c1 &lt;- &#34;one&#34; }() go func() { time.Sleep(time.Second * 2) c2 &lt;- &#34;two&#34; }() start := time.Now() // 获取当前时间  for i := 0; i &lt; 2; i&#43;&#43; { select { case msg1 := &lt;-c1: fmt.">
+func main() { c1 := make(chan string) c2 := make(chan string) go func() { time.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
-<meta property="og:description" content="select #  select 用于处理异步 IO 问题，它的语法与 switch 非常类似。由 select 开始一个新的选择块，每个选择条件由 case 语句来描述，并且每个 case 语句里必须是一个 channel 操作。它既可以用于 channel 的数据接收，也可以用于 channel 的数据发送。如果 select 的多个分支都满足条件，则会随机的选取其中一个满足条件的分支。
+<meta property="og:description" content="4.3 select #  &hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go
+ 4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
+内部可以是值，也可以是表达式，如果switch后未接参数，就必须是已有变量的表达式。
+switch number{ case number &gt;= 90: fmt.Println(&#34;优秀&#34;) case number &gt;= 80: fmt.Println(&#34;良好&#34;) case number &gt;= 60: fmt.Println(&#34;凑合&#34;) default: fmt.Println(&#34;太搓了&#34;) } 而 select 用于处理异步 IO 问题，它的语法与 switch 非常类似。
+4.3.2 select #  由 select 开始一个新的选择块，每个选择条件由 case 语句来描述，并且每个 case 语句里必须是一个 channel 操作。它既可以用于 channel 的数据接收，也可以用于 channel 的数据发送。如果 select 的多个分支都满足条件，则会随机的选取其中一个满足条件的分支。
 新建源文件 channel.go，输入以下代码：
-func main() { c1 := make(chan string) c2 := make(chan string) go func() { time.Sleep(time.Second * 1) c1 &lt;- &#34;one&#34; }() go func() { time.Sleep(time.Second * 2) c2 &lt;- &#34;two&#34; }() start := time.Now() // 获取当前时间  for i := 0; i &lt; 2; i&#43;&#43; { select { case msg1 := &lt;-c1: fmt." />
+func main() { c1 := make(chan string) c2 := make(chan string) go func() { time." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://golang.coding3min.com/4.concurrent/select/" /><meta property="article:section" content="4.concurrent" />
+<meta property="og:url" content="https://golang.coding3min.com/4.concurrent/4-3-select/" /><meta property="article:section" content="4.concurrent" />
 
 
 
-<title>Select | go语言精进之路</title>
+<title>4 3 Select | Go语言精进之路</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.2f57942ed2e6291f61a821160e46380c99fa394c1b31af39411d3012e36308cc.js" integrity="sha256-L1eULtLmKR9hqCEWDkY4DJn6OUwbMa85QR0wEuNjCMw=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.81ffaf8bcbb6a94127782a11bfa30780faeabea881f076e6a572d9b5dd2213e7.js" integrity="sha256-gf&#43;vi8u2qUEneCoRv6MHgPrqvqiB8HbmpXLZtd0iE&#43;c=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -38,7 +46,7 @@ https://github.com/alex-shpak/hugo-book
         
   <nav>
 <h2 class="book-brand">
-  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>Go语言精进之路</span>
   </a>
 </h2>
 
@@ -123,15 +131,13 @@ https://github.com/alex-shpak/hugo-book
 <li>
   <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
 <li>
-  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+  <a href="/4.concurrent/4-2-channel/">4.2 channel</a></li>
 <li>
-  <a href="/4.concurrent/select/"class=active>4.3 select</a></li>
+  <a href="/4.concurrent/4-3-select/"class=active>4.3 select</a></li>
 <li>
-  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+  <a href="/4.concurrent/4-4-timeout/">4.4 设置超时</a></li>
 <li>
-  <a href="/a.timer/reset/reset-time/">设置可热更新的定时器</a></li>
-<li>
-  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">goroutine等待</a></li>
+  <a href="/4.concurrent/4-5-goroutine-wait/">4.5 并发等待</a></li>
 <li>-并发安全</li>
 <li>-协程池</li>
 <li>-消费者生产者框架</li>
@@ -154,7 +160,16 @@ https://github.com/alex-shpak/hugo-book
 <li>跨平台编译</li>
 </ul>
 </li>
-<li><strong>第六章、性能调优</strong>
+<li><strong>第六章、调试与测试</strong>
+<ul>
+<li>-单元测试</li>
+<li>-基准测试</li>
+<li>-mock</li>
+<li>-自动化测试</li>
+<li>-调试</li>
+</ul>
+</li>
+<li><strong>第七章、性能调优</strong>
 <ul>
 <li>-cpu调度</li>
 <li>-内存管理</li>
@@ -163,14 +178,6 @@ https://github.com/alex-shpak/hugo-book
 <li>-逃逸分析</li>
 <li>-链路追踪</li>
 <li>-自监控</li>
-</ul>
-</li>
-<li><strong>第七章、调试与测试</strong>
-<ul>
-<li>-调试</li>
-<li>-单元测试</li>
-<li>-mock</li>
-<li>-自动化测试</li>
 </ul>
 </li>
 <li><strong>第八章、反射</strong></li>
@@ -251,7 +258,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>Select</strong>
+  <strong>4 3 Select</strong>
 
   <label for="toc-control">
     
@@ -265,7 +272,13 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#本节正在编写未完待续催更请留言我会收到邮件"><strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong></a></li>
+    <li><a href="#431-select与switch">4.3.1 select与switch</a></li>
+    <li><a href="#432-select">4.3.2 select</a></li>
+  </ul>
+</nav>
 
 
 
@@ -276,14 +289,42 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h1 id="select">
-  select
-  <a class="anchor" href="#select">#</a>
+  <article class="markdown"><h1 id="43-select">
+  4.3 select
+  <a class="anchor" href="#43-select">#</a>
 </h1>
-<p>select 用于处理异步 IO 问题，它的语法与 switch 非常类似。由 select 开始一个新的选择块，每个选择条件由 case 语句来描述，并且每个 case 语句里必须是一个 channel 操作。它既可以用于 channel
+<h2 id="本节正在编写未完待续催更请留言我会收到邮件">
+  <strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong>
+  <a class="anchor" href="#%e6%9c%ac%e8%8a%82%e6%ad%a3%e5%9c%a8%e7%bc%96%e5%86%99%e6%9c%aa%e5%ae%8c%e5%be%85%e7%bb%ad%e5%82%ac%e6%9b%b4%e8%af%b7%e7%95%99%e8%a8%80%e6%88%91%e4%bc%9a%e6%94%b6%e5%88%b0%e9%82%ae%e4%bb%b6">#</a>
+</h2>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go">https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go</a></p>
+</blockquote>
+<h2 id="431-select与switch">
+  4.3.1 select与switch
+  <a class="anchor" href="#431-select%e4%b8%8eswitch">#</a>
+</h2>
+<p>让我们来复习一下<code>switch</code>语句，在<code>switch</code>语句中，会逐个匹配<code>case</code>语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出<code>switch</code>。</p>
+<p>内部可以是值，也可以是表达式，如果<code>switch</code>后未接参数，就必须是已有变量的表达式。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">number</span>{
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">90</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;优秀&#34;</span>)
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">80</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;良好&#34;</span>)
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">60</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;凑合&#34;</span>)
+    <span style="color:#66d9ef">default</span>:
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;太搓了&#34;</span>)
+}
+</code></pre></div><p>而 <code>select</code> 用于处理异步 <code>IO</code> 问题，它的语法与 <code>switch</code> 非常类似。</p>
+<h2 id="432-select">
+  4.3.2 select
+  <a class="anchor" href="#432-select">#</a>
+</h2>
+<p>由 select 开始一个新的选择块，每个选择条件由 case 语句来描述，并且每个 case 语句里必须是一个 channel 操作。它既可以用于 channel
 的数据接收，也可以用于 channel 的数据发送。如果 select 的多个分支都满足条件，则会随机的选取其中一个满足条件的分支。</p>
 <p>新建源文件 
-  <a href="/4.concurrent/channel/">channel.go</a>，输入以下代码：</p>
+  <a href="channel.go">channel.go</a>，输入以下代码：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
 	<span style="color:#a6e22e">c1</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>)
 	<span style="color:#a6e22e">c2</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">string</span>)
@@ -311,7 +352,10 @@ https://github.com/alex-shpak/hugo-book
 }
 </code></pre></div><p>以上代码先初始化两个 channel c1 和 c2，然后开启两个 goroutine 分别往 c1 和 c2 写入数据，再通过 select 监听两个 channel，从中读取数据并输出。</p>
 <p>运行结果如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go run channel.go received one received two
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go run channel.go 
+received one
+received two
+该函数执行完成耗时： 2.004695535s
 </code></pre></div></article>
  
       <div class="book-footer justify-between"></div>
@@ -338,7 +382,7 @@ https://github.com/alex-shpak/hugo-book
 
 
   <div>
-    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/4.concurrent/select.md" target="_blank" rel="noopener">
+    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/4.concurrent/4-3-select.md" target="_blank" rel="noopener">
       <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
       <span>Edit this page</span>
     </a>
@@ -367,7 +411,13 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#本节正在编写未完待续催更请留言我会收到邮件"><strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong></a></li>
+    <li><a href="#431-select与switch">4.3.1 select与switch</a></li>
+    <li><a href="#432-select">4.3.2 select</a></li>
+  </ul>
+</nav>
 
 
  

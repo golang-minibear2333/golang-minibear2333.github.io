@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>1.bases on go语言精进之路</title>
+    <title>1.bases on Go语言精进之路</title>
     <link>https://golang.coding3min.com/1.base/</link>
-    <description>Recent content in 1.bases on go语言精进之路</description>
+    <description>Recent content in 1.bases on Go语言精进之路</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 26 Jun 2021 02:39:47 +0800</lastBuildDate><atom:link href="https://golang.coding3min.com/1.base/index.xml" rel="self" type="application/rss+xml" />
@@ -82,8 +82,8 @@ name = &amp;#34;s&amp;#34; 像这样赋值
 yes ifelse
  if 20&amp;lt;0{ }else{ fmt.Println(&amp;#34;no&amp;#34;) } 输出
 no 1.5.2 switch 和 type switch #   switch 好理解,是一个替代if else else else接口而提出的,如下，switch 后跟变量，case 后跟常量，只要变量值和常量匹配，就执行该分支下的语句。
-switch name { case &amp;#34;coding3min&amp;#34;: fmt.Println(&amp;#34;welcome&amp;#34; + name) default: fmt.Println(&amp;#34;403 forbidden:&amp;#34; + name) return } 当然switch语句会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在。
-switch { case number &amp;gt;= 90: fmt.Println(&amp;#34;优秀&amp;#34;) case number &amp;gt;= 80: fmt.</description>
+switch name { case &amp;#34;coding3min&amp;#34;: fmt.Println(&amp;#34;welcome&amp;#34; + name) default: fmt.Println(&amp;#34;403 forbidden:&amp;#34; + name) return } 和c++不同，不需要给每个case都手动加入break，当然switch语句会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
+func switchDemo(number int) { switch { case number &amp;gt;= 90: fmt.</description>
     </item>
     
     <item>

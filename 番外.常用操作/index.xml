@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>番外.常用操作s on go语言精进之路</title>
+    <title>番外.常用操作s on Go语言精进之路</title>
     <link>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</link>
-    <description>Recent content in 番外.常用操作s on go语言精进之路</description>
+    <description>Recent content in 番外.常用操作s on Go语言精进之路</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/index.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -71,18 +71,6 @@ Go 语言中的 reader 和 writer 接口也类似。我们只需简单的读写�
       <guid>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
       <description>golang的sort包提供了部分切片排序的函数和用户自定义数据集的函数。
 排序切片 #  func Example1() { arry := []int{5,8,3,1,4,2,7,6} fmt.Println(arry) sort.Ints(arry) fmt.Println(arry) // Output:  // [5 8 3 1 4 2 7 6]  // [1 2 3 4 5 6 7 8] } 排序用户自定义数据集 #  type Person struct { Name string Age int } func (p Person) String() string { return fmt.Sprintf(&amp;#34;%s: %d&amp;#34;, p.Name, p.Age) } // ByAge implements sort.Interface for []Person based on // the Age field.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/</guid>
-      <description>简介 #  Goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
-package main import ( &amp;#34;time&amp;#34; &amp;#34;fmt&amp;#34; ) func say(s string) { for i := 0; i &amp;lt; 3; i++ { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&amp;#34;hello world&amp;#34;) fmt.Println(&amp;#34;over!&amp;#34;) } 输出 over！ , 主线程没有等待
-唯一好方案 #  Golang 官方在 sync 包中提供了 WaitGroup 类型来解决这个问题。其文档描述如下：
- A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for.</description>
     </item>
     
   </channel>

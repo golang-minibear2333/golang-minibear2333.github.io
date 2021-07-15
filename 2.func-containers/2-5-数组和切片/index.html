@@ -19,12 +19,12 @@ int* a = (int *)malloc(10); int* b = new int(4); 此时，a和b的类型也是in
 
 
 
-<title>2 5 数组和切片 | go语言精进之路</title>
+<title>2 5 数组和切片 | Go语言精进之路</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.2f57942ed2e6291f61a821160e46380c99fa394c1b31af39411d3012e36308cc.js" integrity="sha256-L1eULtLmKR9hqCEWDkY4DJn6OUwbMa85QR0wEuNjCMw=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.81ffaf8bcbb6a94127782a11bfa30780faeabea881f076e6a572d9b5dd2213e7.js" integrity="sha256-gf&#43;vi8u2qUEneCoRv6MHgPrqvqiB8HbmpXLZtd0iE&#43;c=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -42,7 +42,7 @@ https://github.com/alex-shpak/hugo-book
         
   <nav>
 <h2 class="book-brand">
-  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>Go语言精进之路</span>
   </a>
 </h2>
 
@@ -127,15 +127,13 @@ https://github.com/alex-shpak/hugo-book
 <li>
   <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
 <li>
-  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+  <a href="/4.concurrent/4-2-channel/">4.2 channel</a></li>
 <li>
-  <a href="/4.concurrent/select/">4.3 select</a></li>
+  <a href="/4.concurrent/4-3-select/">4.3 select</a></li>
 <li>
-  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+  <a href="/4.concurrent/4-4-timeout/">4.4 设置超时</a></li>
 <li>
-  <a href="/a.timer/reset/reset-time/">设置可热更新的定时器</a></li>
-<li>
-  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/">goroutine等待</a></li>
+  <a href="/4.concurrent/4-5-goroutine-wait/">4.5 并发等待</a></li>
 <li>-并发安全</li>
 <li>-协程池</li>
 <li>-消费者生产者框架</li>
@@ -158,7 +156,16 @@ https://github.com/alex-shpak/hugo-book
 <li>跨平台编译</li>
 </ul>
 </li>
-<li><strong>第六章、性能调优</strong>
+<li><strong>第六章、调试与测试</strong>
+<ul>
+<li>-单元测试</li>
+<li>-基准测试</li>
+<li>-mock</li>
+<li>-自动化测试</li>
+<li>-调试</li>
+</ul>
+</li>
+<li><strong>第七章、性能调优</strong>
 <ul>
 <li>-cpu调度</li>
 <li>-内存管理</li>
@@ -167,14 +174,6 @@ https://github.com/alex-shpak/hugo-book
 <li>-逃逸分析</li>
 <li>-链路追踪</li>
 <li>-自监控</li>
-</ul>
-</li>
-<li><strong>第七章、调试与测试</strong>
-<ul>
-<li>-调试</li>
-<li>-单元测试</li>
-<li>-mock</li>
-<li>-自动化测试</li>
 </ul>
 </li>
 <li><strong>第八章、反射</strong></li>

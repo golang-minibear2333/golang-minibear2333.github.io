@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="简介 #  Goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
+<meta name="description" content="4.5 并发等待 #  &hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  简介 #  Goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
 package main import ( &#34;time&#34; &#34;fmt&#34; ) func say(s string) { for i := 0; i &lt; 3; i&#43;&#43; { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&#34;hello world&#34;) fmt.Println(&#34;over!&#34;) } 输出 over！ , 主线程没有等待
 唯一好方案 #  Golang 官方在 sync 包中提供了 WaitGroup 类型来解决这个问题。其文档描述如下：
- A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for.">
+ A WaitGroup waits for a collection of goroutines to finish.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
-<meta property="og:description" content="简介 #  Goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
+<meta property="og:description" content="4.5 并发等待 #  &hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  简介 #  Goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
 package main import ( &#34;time&#34; &#34;fmt&#34; ) func say(s string) { for i := 0; i &lt; 3; i&#43;&#43; { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&#34;hello world&#34;) fmt.Println(&#34;over!&#34;) } 输出 over！ , 主线程没有等待
 唯一好方案 #  Golang 官方在 sync 包中提供了 WaitGroup 类型来解决这个问题。其文档描述如下：
- A WaitGroup waits for a collection of goroutines to finish. The main goroutine calls Add to set the number of goroutines to wait for." />
+ A WaitGroup waits for a collection of goroutines to finish." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/" /><meta property="article:section" content="番外.常用操作" />
+<meta property="og:url" content="https://golang.coding3min.com/4.concurrent/4-5-goroutine-wait/" /><meta property="article:section" content="4.concurrent" />
 
 
 
-<title>等待goroutine完成任务 循环中使用goroutine | go语言精进之路</title>
+<title>4 5 Goroutine Wait | Go语言精进之路</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.2f57942ed2e6291f61a821160e46380c99fa394c1b31af39411d3012e36308cc.js" integrity="sha256-L1eULtLmKR9hqCEWDkY4DJn6OUwbMa85QR0wEuNjCMw=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.81ffaf8bcbb6a94127782a11bfa30780faeabea881f076e6a572d9b5dd2213e7.js" integrity="sha256-gf&#43;vi8u2qUEneCoRv6MHgPrqvqiB8HbmpXLZtd0iE&#43;c=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -40,7 +40,7 @@ https://github.com/alex-shpak/hugo-book
         
   <nav>
 <h2 class="book-brand">
-  <a href="/"><img src="/logo.png" alt="Logo" /><span>go语言精进之路</span>
+  <a href="/"><img src="/logo.png" alt="Logo" /><span>Go语言精进之路</span>
   </a>
 </h2>
 
@@ -125,15 +125,13 @@ https://github.com/alex-shpak/hugo-book
 <li>
   <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/">4.1 并发特性</a></li>
 <li>
-  <a href="/4.concurrent/channel/">4.2 channel</a></li>
+  <a href="/4.concurrent/4-2-channel/">4.2 channel</a></li>
 <li>
-  <a href="/4.concurrent/select/">4.3 select</a></li>
+  <a href="/4.concurrent/4-3-select/">4.3 select</a></li>
 <li>
-  <a href="/4.concurrent/timeout/">4.4 设置超时</a></li>
+  <a href="/4.concurrent/4-4-timeout/">4.4 设置超时</a></li>
 <li>
-  <a href="/a.timer/reset/reset-time/">设置可热更新的定时器</a></li>
-<li>
-  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/%E7%AD%89%E5%BE%85goroutine%E5%AE%8C%E6%88%90%E4%BB%BB%E5%8A%A1_%E5%BE%AA%E7%8E%AF%E4%B8%AD%E4%BD%BF%E7%94%A8goroutine/"class=active>goroutine等待</a></li>
+  <a href="/4.concurrent/4-5-goroutine-wait/"class=active>4.5 并发等待</a></li>
 <li>-并发安全</li>
 <li>-协程池</li>
 <li>-消费者生产者框架</li>
@@ -156,7 +154,16 @@ https://github.com/alex-shpak/hugo-book
 <li>跨平台编译</li>
 </ul>
 </li>
-<li><strong>第六章、性能调优</strong>
+<li><strong>第六章、调试与测试</strong>
+<ul>
+<li>-单元测试</li>
+<li>-基准测试</li>
+<li>-mock</li>
+<li>-自动化测试</li>
+<li>-调试</li>
+</ul>
+</li>
+<li><strong>第七章、性能调优</strong>
 <ul>
 <li>-cpu调度</li>
 <li>-内存管理</li>
@@ -165,14 +172,6 @@ https://github.com/alex-shpak/hugo-book
 <li>-逃逸分析</li>
 <li>-链路追踪</li>
 <li>-自监控</li>
-</ul>
-</li>
-<li><strong>第七章、调试与测试</strong>
-<ul>
-<li>-调试</li>
-<li>-单元测试</li>
-<li>-mock</li>
-<li>-自动化测试</li>
 </ul>
 </li>
 <li><strong>第八章、反射</strong></li>
@@ -253,7 +252,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>等待goroutine完成任务 循环中使用goroutine</strong>
+  <strong>4 5 Goroutine Wait</strong>
 
   <label for="toc-control">
     
@@ -269,6 +268,7 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#本节正在编写未完待续催更请留言我会收到邮件"><strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong></a></li>
     <li><a href="#简介">简介</a></li>
     <li><a href="#唯一好方案">唯一好方案</a></li>
     <li><a href="#引用">引用</a></li>
@@ -284,7 +284,15 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h2 id="简介">
+  <article class="markdown"><h1 id="45-并发等待">
+  4.5 并发等待
+  <a class="anchor" href="#45-%e5%b9%b6%e5%8f%91%e7%ad%89%e5%be%85">#</a>
+</h1>
+<h2 id="本节正在编写未完待续催更请留言我会收到邮件">
+  <strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong>
+  <a class="anchor" href="#%e6%9c%ac%e8%8a%82%e6%ad%a3%e5%9c%a8%e7%bc%96%e5%86%99%e6%9c%aa%e5%ae%8c%e5%be%85%e7%bb%ad%e5%82%ac%e6%9b%b4%e8%af%b7%e7%95%99%e8%a8%80%e6%88%91%e4%bc%9a%e6%94%b6%e5%88%b0%e9%82%ae%e4%bb%b6">#</a>
+</h2>
+<h2 id="简介">
   简介
   <a class="anchor" href="#%e7%ae%80%e4%bb%8b">#</a>
 </h2>
@@ -393,7 +401,7 @@ https://github.com/alex-shpak/hugo-book
 
 
   <div>
-    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/%e7%95%aa%e5%a4%96.%e5%b8%b8%e7%94%a8%e6%93%8d%e4%bd%9c/%e7%ad%89%e5%be%85goroutine%e5%ae%8c%e6%88%90%e4%bb%bb%e5%8a%a1_%e5%be%aa%e7%8e%af%e4%b8%ad%e4%bd%bf%e7%94%a8goroutine.md" target="_blank" rel="noopener">
+    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/4.concurrent/4-5-goroutine-wait.md" target="_blank" rel="noopener">
       <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
       <span>Edit this page</span>
     </a>
@@ -424,6 +432,7 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#本节正在编写未完待续催更请留言我会收到邮件"><strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong></a></li>
     <li><a href="#简介">简介</a></li>
     <li><a href="#唯一好方案">唯一好方案</a></li>
     <li><a href="#引用">引用</a></li>

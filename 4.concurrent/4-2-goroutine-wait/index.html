@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="4.2 并发等待 #  4.2.1 简介 #  goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
+<meta name="description" content="4.2 并发等待 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/goroutine-wait/
+ 4.2.1 简介 #  goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
 func say(s string) { for i := 0; i &lt; 3; i&#43;&#43; { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&#34;hello world&#34;) fmt.Println(&#34;over!&#34;) } 输出 over！ , 主线程没有等待
 4.2.2 使用 Sleep 等待 #  func main() { go say(&#34;hello world&#34;) time.Sleep(time.Second*1) fmt.Println(&#34;over!&#34;) } 运行修改后的程序，结果如下：
-hello world hello world hello world over! 结果符合预期，但是太 low 了，我们不知道实际执行中应该等待多长时间，所以不能接受这个方案！">
+hello world hello world hello world over!">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
-<meta property="og:description" content="4.2 并发等待 #  4.2.1 简介 #  goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
+<meta property="og:description" content="4.2 并发等待 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/goroutine-wait/
+ 4.2.1 简介 #  goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
 func say(s string) { for i := 0; i &lt; 3; i&#43;&#43; { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&#34;hello world&#34;) fmt.Println(&#34;over!&#34;) } 输出 over！ , 主线程没有等待
 4.2.2 使用 Sleep 等待 #  func main() { go say(&#34;hello world&#34;) time.Sleep(time.Second*1) fmt.Println(&#34;over!&#34;) } 运行修改后的程序，结果如下：
-hello world hello world hello world over! 结果符合预期，但是太 low 了，我们不知道实际执行中应该等待多长时间，所以不能接受这个方案！" />
+hello world hello world hello world over!" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/" /><meta property="article:section" content="4.concurrent" />
 
@@ -22,7 +24,7 @@ hello world hello world hello world over! 结果符合预期，但是太 low 了
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.fd400ef96cdb35901503f5105c5aba8f752485f1bc693ade0e986fbd30d77ef7.js" integrity="sha256-/UAO&#43;WzbNZAVA/UQXFq6j3UkhfG8aTreDphvvTDXfvc=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.272894cb6f9e6b68db5cf00d121c54e78896127ab5fb59d4f78ee7c7c02b67e1.js" integrity="sha256-JyiUy2&#43;ea2jbXPANEhxU54iWEnq1&#43;1nU947nx8ArZ&#43;E=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -292,6 +294,9 @@ https://github.com/alex-shpak/hugo-book
   4.2 并发等待
   <a class="anchor" href="#42-%e5%b9%b6%e5%8f%91%e7%ad%89%e5%be%85">#</a>
 </h1>
+<blockquote>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/goroutine-wait/">https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/goroutine-wait/</a></p>
+</blockquote>
 <h2 id="421-简介">
   4.2.1 简介
   <a class="anchor" href="#421-%e7%ae%80%e4%bb%8b">#</a>

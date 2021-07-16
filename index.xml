@@ -293,10 +293,11 @@ goroutine 也就是go协程，概念类似于线程， Go 程序运行时会自�
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/</guid>
-      <description>4.2 并发等待 #  4.2.1 简介 #  goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
+      <description>4.2 并发等待 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/goroutine-wait/
+ 4.2.1 简介 #  goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
 func say(s string) { for i := 0; i &amp;lt; 3; i++ { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&amp;#34;hello world&amp;#34;) fmt.Println(&amp;#34;over!&amp;#34;) } 输出 over！ , 主线程没有等待
 4.2.2 使用 Sleep 等待 #  func main() { go say(&amp;#34;hello world&amp;#34;) time.Sleep(time.Second*1) fmt.Println(&amp;#34;over!&amp;#34;) } 运行修改后的程序，结果如下：
-hello world hello world hello world over! 结果符合预期，但是太 low 了，我们不知道实际执行中应该等待多长时间，所以不能接受这个方案！</description>
+hello world hello world hello world over!</description>
     </item>
     
     <item>

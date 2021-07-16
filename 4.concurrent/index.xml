@@ -15,7 +15,7 @@
       <description>4.1 go 语言中的并发特性 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.1-goroutine/
  以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。
 go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 chan 相互配合，这决定了他的先天优势。
-goroutine 的概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
+goroutine 也就是go协程，概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
 4.1.1 他和线程对比 #  从使用上讲
  比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 chan 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说）  从其实现上讲
  从资源上讲，线程的栈内存大小一般是固定的一般为 2MB ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 goroutine 栈内存是可变的，初始一般为 2KB ，随着需求可以扩大达到 1GB。 所以 goroutine 十分的轻量级，且能满足不同的需求。 从调度上讲，线程的调度由 OS 的内核完成；线程的切换需要 CPU 寄存器 和 内存的数据交换 ，从而切换不同的线程上下文。 其触发方式为 CPU时钟 , 而 goroutine 的调度则比较轻量级，由自身的调度器完成。 协程同线程的关系，有些类似于 线程同进程的关系。  4.</description>
@@ -23,12 +23,26 @@ goroutine 的概念类似于线程， Go 程序运行时会自动调度和管理
     
     <item>
       <title></title>
-      <link>https://golang.coding3min.com/4.concurrent/4-2-channel/</link>
+      <link>https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://golang.coding3min.com/4.concurrent/4-2-channel/</guid>
-      <description>4.2 channel #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/channel.go
- channel 是 goroutine 之间互相通讯的东西。类似我们 Unix 上的管道（可以在进程间传递消息），用来 goroutine 之间发消息和接收消息。其实，就是在做 goroutine 之间的内存共享。channel 是类型相关的，也就是说一个 channel 只能传递一种类型的值，这个类型需要在 channel 声明时指定。
+      <guid>https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/</guid>
+      <description>4.2 并发等待 #  4.2.1 简介 #  goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
+func say(s string) { for i := 0; i &amp;lt; 3; i++ { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&amp;#34;hello world&amp;#34;) fmt.Println(&amp;#34;over!&amp;#34;) } 输出 over！ , 主线程没有等待
+4.2.2 使用 Sleep 等待 #  func main() { go say(&amp;#34;hello world&amp;#34;) time.Sleep(time.Second*1) fmt.Println(&amp;#34;over!&amp;#34;) } 运行修改后的程序，结果如下：
+hello world hello world hello world over! 结果符合预期，但是太 low 了，我们不知道实际执行中应该等待多长时间，所以不能接受这个方案！</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/4.concurrent/4-3-channel/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/4.concurrent/4-3-channel/</guid>
+      <description>4.2 channel #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/channel.go
+ 我们平时肯定没少接触过队列，在
+channel 是 goroutine 之间互相通讯的东西。类似我们 Unix 上的管道（可以在进程间传递消息），用来 goroutine 之间发消息和接收消息。其实，就是在做 goroutine 之间的内存共享。
+channel是类型相关的，也就是说一个 channel 只能传递一种类型的值，这个类型需要在 channel 声明时指定。
 4.2.1 声明与初始化 #  channel 的一般声明形式：
 var chanName chan 类型 与普通变量的声明不同的是在类型前面加了 channel 关键字，类型 则指定了这个 channel 所能传递的元素类型。示例：
 var a chan int //声明一个传递元素类型为int的channel var b chan float64 var c chan string 初始化一个 channel 也非常简单，直接使用 Go 语言内置的 make() 函数，示例：
@@ -37,10 +51,10 @@ a := make(chan int) //初始化一个int型的名为a的channel b := make(chan f
     
     <item>
       <title></title>
-      <link>https://golang.coding3min.com/4.concurrent/4-3-select/</link>
+      <link>https://golang.coding3min.com/4.concurrent/4-4-select/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://golang.coding3min.com/4.concurrent/4-3-select/</guid>
+      <guid>https://golang.coding3min.com/4.concurrent/4-4-select/</guid>
       <description>4.3 select #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go
  4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
 内部可以是值，也可以是表达式，如果switch后未接参数，就必须是已有变量的表达式。
@@ -52,24 +66,12 @@ func main() { c1 := make(chan string) c2 := make(chan string) go func() { time.<
     
     <item>
       <title></title>
-      <link>https://golang.coding3min.com/4.concurrent/4-4-timeout/</link>
+      <link>https://golang.coding3min.com/4.concurrent/4-5-timeout/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://golang.coding3min.com/4.concurrent/4-4-timeout/</guid>
+      <guid>https://golang.coding3min.com/4.concurrent/4-5-timeout/</guid>
       <description>4.4 定时器 #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  可热更新的定时器 #  废话不多说，直接上代码
 package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) type Server struct { tk *time.Ticker reset chan struct{} Close chan struct{} Period int64 } func main() { s := CreateServer(1) go s.Start() time.Sleep(time.Duration(10) * time.Second) s.Update(3) time.Sleep(time.Duration(10) * time.Second) s.Stop() fmt.Println(&amp;#34;good bye&amp;#34;) } func CreateServer(Period int64) *Server { return &amp;amp;Server{ tk: nil, reset: make(chan struct{}), Close: make(chan struct{}), Period: Period, } } // 程序启动 func (s *Server) Start() { // 定时 	s.</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://golang.coding3min.com/4.concurrent/4-5-goroutine-wait/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://golang.coding3min.com/4.concurrent/4-5-goroutine-wait/</guid>
-      <description>4.5 并发等待 #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  简介 #  Goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
-package main import ( &amp;#34;time&amp;#34; &amp;#34;fmt&amp;#34; ) func say(s string) { for i := 0; i &amp;lt; 3; i++ { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&amp;#34;hello world&amp;#34;) fmt.Println(&amp;#34;over!&amp;#34;) } 输出 over！ , 主线程没有等待
-唯一好方案 #  Golang 官方在 sync 包中提供了 WaitGroup 类型来解决这个问题。其文档描述如下：
- A WaitGroup waits for a collection of goroutines to finish.</description>
     </item>
     
   </channel>

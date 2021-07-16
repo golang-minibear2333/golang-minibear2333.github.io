@@ -44,13 +44,13 @@
   </url><url>
     <loc>https://golang.coding3min.com/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/</loc>
   </url><url>
-    <loc>https://golang.coding3min.com/4.concurrent/4-2-channel/</loc>
+    <loc>https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/</loc>
   </url><url>
-    <loc>https://golang.coding3min.com/4.concurrent/4-3-select/</loc>
+    <loc>https://golang.coding3min.com/4.concurrent/4-3-channel/</loc>
   </url><url>
-    <loc>https://golang.coding3min.com/4.concurrent/4-4-timeout/</loc>
+    <loc>https://golang.coding3min.com/4.concurrent/4-4-select/</loc>
   </url><url>
-    <loc>https://golang.coding3min.com/4.concurrent/4-5-goroutine-wait/</loc>
+    <loc>https://golang.coding3min.com/4.concurrent/4-5-timeout/</loc>
   </url><url>
     <loc>https://golang.coding3min.com/books-share/</loc>
     <priority>0</priority>

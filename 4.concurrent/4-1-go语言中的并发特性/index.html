@@ -6,7 +6,7 @@
 <meta name="description" content="4.1 go 语言中的并发特性 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.1-goroutine/
  以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。
 go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 chan 相互配合，这决定了他的先天优势。
-goroutine 的概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
+goroutine 也就是go协程，概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
 4.1.1 他和线程对比 #  从使用上讲
  比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 chan 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说）  从其实现上讲
  从资源上讲，线程的栈内存大小一般是固定的一般为 2MB ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 goroutine 栈内存是可变的，初始一般为 2KB ，随着需求可以扩大达到 1GB。 所以 goroutine 十分的轻量级，且能满足不同的需求。 从调度上讲，线程的调度由 OS 的内核完成；线程的切换需要 CPU 寄存器 和 内存的数据交换 ，从而切换不同的线程上下文。 其触发方式为 CPU时钟 , 而 goroutine 的调度则比较轻量级，由自身的调度器完成。 协程同线程的关系，有些类似于 线程同进程的关系。  4.">
@@ -14,7 +14,7 @@ goroutine 的概念类似于线程， Go 程序运行时会自动调度和管理
 <meta property="og:description" content="4.1 go 语言中的并发特性 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.1-goroutine/
  以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。
 go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 chan 相互配合，这决定了他的先天优势。
-goroutine 的概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
+goroutine 也就是go协程，概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
 4.1.1 他和线程对比 #  从使用上讲
  比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 chan 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说）  从其实现上讲
  从资源上讲，线程的栈内存大小一般是固定的一般为 2MB ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 goroutine 栈内存是可变的，初始一般为 2KB ，随着需求可以扩大达到 1GB。 所以 goroutine 十分的轻量级，且能满足不同的需求。 从调度上讲，线程的调度由 OS 的内核完成；线程的切换需要 CPU 寄存器 和 内存的数据交换 ，从而切换不同的线程上下文。 其触发方式为 CPU时钟 , 而 goroutine 的调度则比较轻量级，由自身的调度器完成。 协程同线程的关系，有些类似于 线程同进程的关系。  4." />
@@ -28,7 +28,7 @@ goroutine 的概念类似于线程， Go 程序运行时会自动调度和管理
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.81ffaf8bcbb6a94127782a11bfa30780faeabea881f076e6a572d9b5dd2213e7.js" integrity="sha256-gf&#43;vi8u2qUEneCoRv6MHgPrqvqiB8HbmpXLZtd0iE&#43;c=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.fd400ef96cdb35901503f5105c5aba8f752485f1bc693ade0e986fbd30d77ef7.js" integrity="sha256-/UAO&#43;WzbNZAVA/UQXFq6j3UkhfG8aTreDphvvTDXfvc=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -131,16 +131,17 @@ https://github.com/alex-shpak/hugo-book
 <li>
   <a href="/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/"class=active>4.1 并发特性</a></li>
 <li>
-  <a href="/4.concurrent/4-2-channel/">4.2 channel</a></li>
+  <a href="/4.concurrent/4-2-goroutine-wait/">4.2 并发等待 </a></li>
 <li>
-  <a href="/4.concurrent/4-3-select/">4.3 select</a></li>
+  <a href="/4.concurrent/4-3-channel/">4.3 channel</a></li>
 <li>
-  <a href="/4.concurrent/4-4-timeout/">4.4 设置超时</a></li>
+  <a href="/4.concurrent/4-4-select/">4.4 select</a></li>
 <li>
-  <a href="/4.concurrent/4-5-goroutine-wait/">4.5 并发等待</a></li>
+  <a href="/4.concurrent/4-5-timeout/">4.5 设置超时</a></li>
 <li>-并发安全</li>
 <li>-协程池</li>
 <li>-消费者生产者框架</li>
+<li>-GMP调度原理</li>
 </ul>
 </li>
 <li><strong>第五章、标准库</strong>
@@ -207,6 +208,7 @@ https://github.com/alex-shpak/hugo-book
 <li><strong>第x章、微服务</strong></li>
 <li><strong>第x章、服务治理</strong></li>
 <li><strong>第x章、GO语言版本分析</strong></li>
+<li><strong>第x章、Go语言工程化实践</strong></li>
 <li><strong>番外1、拓展应用</strong>
 <ul>
 <li>
@@ -276,7 +278,7 @@ https://github.com/alex-shpak/hugo-book
   <ul>
     <li><a href="#411-他和线程对比">4.1.1 他和线程对比</a></li>
     <li><a href="#412-创建与使用">4.1.2 创建与使用</a></li>
-    <li><a href="#413-goroutine">4.1.3 goroutine</a></li>
+    <li><a href="#413-体验并发">4.1.3 体验并发</a></li>
     <li><a href="#414-小结">4.1.4 小结</a></li>
   </ul>
 </nav>
@@ -299,7 +301,7 @@ https://github.com/alex-shpak/hugo-book
 </blockquote>
 <p>以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。</p>
 <p><code>go</code> 在并发方面为我们提供了一个语言级别的支持， <code>goroutine</code> 和 <code>chan</code> 相互配合，这决定了他的先天优势。</p>
-<p><code>goroutine</code> 的概念类似于线程， <code>Go</code> 程序运行时会自动调度和管理，系统能智能地将 <code>goroutine</code> 中的任务合理地分配给 <code>CPU</code> , 让这些任务尽量并发运作。</p>
+<p><code>goroutine</code> 也就是go协程，概念类似于线程， <code>Go</code> 程序运行时会自动调度和管理，系统能智能地将 <code>goroutine</code> 中的任务合理地分配给 <code>CPU</code> , 让这些任务尽量并发运作。</p>
 <h2 id="411-他和线程对比">
   4.1.1 他和线程对比
   <a class="anchor" href="#411-%e4%bb%96%e5%92%8c%e7%ba%bf%e7%a8%8b%e5%af%b9%e6%af%94">#</a>
@@ -348,22 +350,21 @@ maybe you can's see me!
 	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>) <span style="color:#75715e">//main运行结束会暴力终止所有协程，所以这里先等待1秒
 </span><span style="color:#75715e"></span>}
 </code></pre></div><p>PS: 和线程不同，<code>goroutine</code>没有唯一的<code>id</code>，所以我们没办法专门针对某个协程进行操作。</p>
-<h2 id="413-goroutine">
-  4.1.3 goroutine
-  <a class="anchor" href="#413-goroutine">#</a>
+<h2 id="413-体验并发">
+  4.1.3 体验并发
+  <a class="anchor" href="#413-%e4%bd%93%e9%aa%8c%e5%b9%b6%e5%8f%91">#</a>
 </h2>
-<p>goroutine 是 Go 语言并行设计的核心。goroutine 是一种比线程更轻量的实现，十几个 goroutine 可能在底层就是几个线程。 实际上是 Go 在 runtime、系统调用等多方面对 <code>goroutine</code> 调度进行了封装和处理。</p>
-<p>使用 goroutine 只需要简单的在需要执行的函数前添加 go 关键字即可。当执行 goroutine 时候，Go 语言立即返回，接着执行剩余的代码，不会阻塞主线程。</p>
+<p>当执行 goroutine 时候，Go 语言立即返回，接着执行剩余的代码，不会阻塞主线程。</p>
 <p>下面我们通过一小段代码来讲解 go 的使用：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">//首先我们先实现一个 Add()函数
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Add</span>(<span style="color:#a6e22e">a</span>, <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">int</span>) {
-<span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">c</span>)
+    <span style="color:#a6e22e">c</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">c</span>)
 }
 
 <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>) <span style="color:#75715e">//使用go关键字让函数并发执行
-</span></code></pre></div><p>Go 的并发执行就是这么简单，当在一个函数前加上 go 关键字，该函数就会在一个新的 goroutine 中并发执行，当该函数执行完毕时，这个新的 goroutine
-也就结束了。不过需要注意的是，如果该函数具有返回值，那么返回值会被丢弃。所以什么时候用 go 还需要酌情考虑。</p>
+</span></code></pre></div><p>该函数就会在一个新的 goroutine 中并发执行，当该函数执行完毕时，这个新的 goroutine 也就结束了。</p>
+<p>不过需要注意的是，如果该函数具有返回值，那么返回值会被丢弃。所以什么时候用 go 还需要酌情考虑。</p>
 <p>接着我们通过一个案例来体验一下 Go 的并发到底是怎么样的。新建源文件 goroutine2.go，输入以下代码：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
 
@@ -382,14 +383,33 @@ maybe you can's see me!
 </code></pre></div><p>执行 goroutine.go 文件会发现屏幕上什么都没有，但程序并不会报错，这是什么原因呢？</p>
 <p>原来当主程序执行到 for 循环时启动了 10 个 goroutine，然后主程序就退出了，而启动的 10 个 goroutine 还没来得及执行
 Add() 函数，所以程序不会有任何输出。也就是说主 goroutine 并不会等待其他 goroutine 执行结束。</p>
-<p>Go 语言提供的信道（channel）就是专门解决并发通信问题的，下一节我们将详细介绍。</p>
+<p>并发等待的问题我将在下一节进行介绍。</p>
 <h2 id="414-小结">
   4.1.4 小结
   <a class="anchor" href="#414-%e5%b0%8f%e7%bb%93">#</a>
 </h2>
-<p>学 go 语言必学并发，通过本节我们知道了协程是非常容易创建的，而且他非常轻量只占用4k，其他语言很容易就上<code>MB</code></p>
-<p>协程的使用还要配合数据传输，生产者消费者模型，关于协程的调度，我们后续再说。</p>
+<p>学 go 语言必学并发，通过本节我们知道了 <code>goroutine</code> 是 Go 语言并行设计的核心。十几个 <code>goroutine</code> 可能在底层就是几个线程。 实际上是 Go 在 <code>runtime</code> 系统调用等多方面对 <code>goroutine</code> 调度进行了封装和处理。</p>
+<p>协程是非常容易创建的，而且他非常轻量只占用2k，其他语言最小大多都是 <code>MB</code>，协程的使用还要配合数据传输，生产者消费者模型，关于协程的调度，我们后续再说。</p>
 <p>另外并发 bug 的定位和解决是老大难的问题了，平时就要注意的良好的代码风格和编程习惯。</p>
+<p><strong>拓展知识（栈内存）</strong>：</p>
+<p>关于 goroutine stack size（栈内存大小） 
+  <a href="https://golang.org/doc/go1.2#stack_size">官方的文档</a> 中所属，<code>1.2</code> 之前最小是4kb，在<code>1.2</code> 变成8kb，并且可以使用
+  <a href="https://golang.org/pkg/runtime/debug/#SetMaxStack">SetMaxStack</a> 设置栈最大大小。</p>
+<p>在 
+  <a href="https://golang.org/pkg/runtime/debug">runtime/debug</a> 包能控制最大的单个 <code>goroutine</code> 的堆栈的大小。在 64 位系统上默认为 1GB，在 32 位系统上默认为 250MB。</p>
+<p>因为每个goroutine需要能够运行，所以它们都有自己的栈。假如每个goroutine分配固定栈大小并且不能增长，太小则会导致溢出，太大又会浪费空间，无法存在许多的goroutine。</p>
+<p>所以在
+  <a href="https://golang.org/doc/go1.3#stacks">1.3版本</a>中，改为了 Contiguous stack（ 
+  <a href="https://docs.google.com/document/d/1wAaf1rYoM4S4gtnPh0zOlGzWtrZFQ5suE8qr2sD8uWQ/pub">连续栈</a> ），为了解决这个问题，goroutine可以初始时只给栈分配很小的空间(8KB)，然后随着使用过程中的需要自动地增长。这就是为什么Go可以开千千万万个goroutine而不会耗尽内存。</p>
+<p>
+  <a href="https://golang.org/doc/go1.4#runtime">1.4 版本</a> goroutine 堆栈从 8Kb 减少到 2Kb</p>
+<p>拓展阅读</p>
+<ul>
+<li>
+  <a href="https://tiancaiamao.gitbooks.io/go-internals/content/zh/03.5.html">连续栈</a></li>
+<li>
+  <a href="https://medium.com/a-journey-with-go/go-how-does-the-goroutine-stack-size-evolve-447fc02085e5">Go: How Does the Goroutine Stack Size Evolve?</a></li>
+</ul>
 </article>
  
       <div class="book-footer justify-between"></div>
@@ -449,7 +469,7 @@ Add() 函数，所以程序不会有任何输出。也就是说主 goroutine 并
   <ul>
     <li><a href="#411-他和线程对比">4.1.1 他和线程对比</a></li>
     <li><a href="#412-创建与使用">4.1.2 创建与使用</a></li>
-    <li><a href="#413-goroutine">4.1.3 goroutine</a></li>
+    <li><a href="#413-体验并发">4.1.3 体验并发</a></li>
     <li><a href="#414-小结">4.1.4 小结</a></li>
   </ul>
 </nav>

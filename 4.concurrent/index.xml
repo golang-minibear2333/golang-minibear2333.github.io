@@ -27,7 +27,7 @@ goroutine 也就是go协程，概念类似于线程， Go 程序运行时会自�
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/</guid>
-      <description>4.2 并发等待 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/goroutine-wait/
+      <description>4.2 并发等待 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.2-goroutine-wait/
  4.2.1 简介 #  goroutine 是 Golang 中非常有用的功能，有时候 goroutine 没执行完函数就返回了，如果希望等待当前的 goroutine 执行完成再接着往下执行，该怎么办？
 func say(s string) { for i := 0; i &amp;lt; 3; i++ { time.Sleep(100 * time.Millisecond) fmt.Println(s) } } func main() { go say(&amp;#34;hello world&amp;#34;) fmt.Println(&amp;#34;over!&amp;#34;) } 输出 over！ , 主线程没有等待
 4.2.2 使用 Sleep 等待 #  func main() { go say(&amp;#34;hello world&amp;#34;) time.Sleep(time.Second*1) fmt.Println(&amp;#34;over!&amp;#34;) } 运行修改后的程序，结果如下：
@@ -40,14 +40,19 @@ hello world hello world hello world over!</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://golang.coding3min.com/4.concurrent/4-3-channel/</guid>
-      <description>4.2 channel #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/channel.go
- 我们平时肯定没少接触过队列，在
-channel 是 goroutine 之间互相通讯的东西。类似我们 Unix 上的管道（可以在进程间传递消息），用来 goroutine 之间发消息和接收消息。其实，就是在做 goroutine 之间的内存共享。
-channel是类型相关的，也就是说一个 channel 只能传递一种类型的值，这个类型需要在 channel 声明时指定。
-4.2.1 声明与初始化 #  channel 的一般声明形式：
+      <description>4.3 channel #  到这里你正在接触最核心和重要的知识！认真学习的你很棒！
+ 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.3-channel/
+ 4.3.1 什么是 channel #  Go 是一门从语言级别就支持并发的编程语言， 它有一个设计哲学很特别 不要通过共享内存来通信，而应通过通信来共享内存 ，听起来是有一点绕。
+在传统语言中并发使用全局变量来进行不同线程之间的数据共享，这种方式就是使用共享内存的方式进行通信。而 Go 会在协程和协程之间打一个隧道，通过这个隧道来传输数据（发送和接收）。
+ 打个比方，我们平时肯定没少接触过队列，队列的特点是先进先出，多方生产插入，多方消费接收。这个队列/隧道就是channel。
+channel 是 goroutine 之间互相通讯的东西，goroutine 之间用来发消息和接收消息。其实，就是在做 goroutine 之间的内存共享。
+我们来看看具体是什么使用的。
+4.3.2 声明与初始化 #  channel是类型相关的，也就是说一个 channel 只能传递一种类型的值，这个类型需要在 channel 声明时指定。
+channel 的一般声明形式：
 var chanName chan 类型 与普通变量的声明不同的是在类型前面加了 channel 关键字，类型 则指定了这个 channel 所能传递的元素类型。示例：
-var a chan int //声明一个传递元素类型为int的channel var b chan float64 var c chan string 初始化一个 channel 也非常简单，直接使用 Go 语言内置的 make() 函数，示例：
-a := make(chan int) //初始化一个int型的名为a的channel b := make(chan float64) c := make(chan string) channel 最频繁的操作就是写入和读取，这两个操作也非常简单，示例：</description>
+var a chan int //声明一个传递元素类型为int的channel var b chan float64 var c chan string 通道是一个引用类型，初始值为nil，对于值为nil的通道，不论具体是什么类型，它们所属的接收和发送操作都会永久处于阻塞状态。
+所以必须手动make初始化，示例：
+a := make(chan int) //初始化一个int型的名为a的channel b := make(chan float64) c := make(chan string) 既然是队列，那就有大小，上面没声明具体的大小，被认为是无缓冲的（注意大小是 0，不是 1）也就是说必须有其他goroutine接收，不然就会阻塞在那。声明有缓冲的，指定大小就可以了。</description>
     </item>
     
     <item>
@@ -56,13 +61,12 @@ a := make(chan int) //初始化一个int型的名为a的channel b := make(chan f
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://golang.coding3min.com/4.concurrent/4-4-select/</guid>
-      <description>4.3 select #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go
+      <description>4.4 select #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go
  4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
 内部可以是值，也可以是表达式，如果switch后未接参数，就必须是已有变量的表达式。
 switch number{ case number &amp;gt;= 90: fmt.Println(&amp;#34;优秀&amp;#34;) case number &amp;gt;= 80: fmt.Println(&amp;#34;良好&amp;#34;) case number &amp;gt;= 60: fmt.Println(&amp;#34;凑合&amp;#34;) default: fmt.Println(&amp;#34;太搓了&amp;#34;) } 而 select 用于处理异步 IO 问题，它的语法与 switch 非常类似。
-4.3.2 select #  由 select 开始一个新的选择块，每个选择条件由 case 语句来描述，并且每个 case 语句里必须是一个 channel 操作。它既可以用于 channel 的数据接收，也可以用于 channel 的数据发送。如果 select 的多个分支都满足条件，则会随机的选取其中一个满足条件的分支。
-新建源文件 channel.go，输入以下代码：
-func main() { c1 := make(chan string) c2 := make(chan string) go func() { time.</description>
+4.3.4 超时机制 #  相反的，如果 channel 中的数据一直没有被读取，那么写入操作也会一直处于阻塞状态。如果不正确处理这个情况，很可能会导致整个 goroutine 锁死，这就是超时问题。Go 语言没有针对超时提供专门的处理机制，但是我们却可以利用 select 来巧妙地实现超时处理机制，下面看一个示例：
+t := make(chan bool) go func() { time.Sleep(1e9) //等待1秒  t &amp;lt;- true }() select { case &amp;lt;-ch: //从ch中读取数据  case &amp;lt;-t: //如果1秒后没有从ch中读取到数据，那么从t中读取，并进行下一步操作 } 这样的方法就可以让程序在等待 1 秒后继续执行，而不会因为 ch 读取等待而导致程序停滞，从而巧妙地实现了超时处理机制，这种方法不仅简单，在实际项目开发中也是非常实用的。</description>
     </item>
     
     <item>
@@ -71,8 +75,27 @@ func main() { c1 := make(chan string) c2 := make(chan string) go func() { time.<
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://golang.coding3min.com/4.concurrent/4-5-timeout/</guid>
-      <description>4.4 定时器 #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  可热更新的定时器 #  废话不多说，直接上代码
-package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) type Server struct { tk *time.Ticker reset chan struct{} Close chan struct{} Period int64 } func main() { s := CreateServer(1) go s.Start() time.Sleep(time.Duration(10) * time.Second) s.Update(3) time.Sleep(time.Duration(10) * time.Second) s.Stop() fmt.Println(&amp;#34;good bye&amp;#34;) } func CreateServer(Period int64) *Server { return &amp;amp;Server{ tk: nil, reset: make(chan struct{}), Close: make(chan struct{}), Period: Period, } } // 程序启动 func (s *Server) Start() { // 定时 	s.</description>
+      <description>4.4 定时器 #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  超时关闭 #   完整代码
+package main import &amp;#34;time&amp;#34; func main() { t := make(chan bool) ch := make(chan int) defer func() { close(ch) close(t) }() go func() { time.Sleep(1e9) //等待1秒 	t &amp;lt;- true }() go func() { time.Sleep(time.Second * 2) ch &amp;lt;- 123 }() select { case &amp;lt;-ch: //从ch中读取数据  case &amp;lt;-t: //如果1秒后没有从ch中读取到数据，那么从t中读取，并进行下一步操作 	} } 可热更新的定时器 #  废话不多说，直接上代码
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) type Server struct { tk *time.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/4.concurrent/4-6-%E6%B1%A0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/4.concurrent/4-6-%E6%B1%A0/</guid>
+      <description>&amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/4.concurrent/4-7-%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/4.concurrent/4-7-%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</guid>
+      <description>&amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  </description>
     </item>
     
   </channel>

@@ -3,30 +3,26 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="4.4 select #  &hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go
- 4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
-内部可以是值，也可以是表达式，如果switch后未接参数，就必须是已有变量的表达式。
-switch number{ case number &gt;= 90: fmt.Println(&#34;优秀&#34;) case number &gt;= 80: fmt.Println(&#34;良好&#34;) case number &gt;= 60: fmt.Println(&#34;凑合&#34;) default: fmt.Println(&#34;太搓了&#34;) } 而 select 用于处理异步 IO 问题，它的语法与 switch 非常类似。
-4.3.4 超时机制 #  相反的，如果 channel 中的数据一直没有被读取，那么写入操作也会一直处于阻塞状态。如果不正确处理这个情况，很可能会导致整个 goroutine 锁死，这就是超时问题。Go 语言没有针对超时提供专门的处理机制，但是我们却可以利用 select 来巧妙地实现超时处理机制，下面看一个示例：
-t := make(chan bool) go func() { time.Sleep(1e9) //等待1秒  t &lt;- true }() select { case &lt;-ch: //从ch中读取数据  case &lt;-t: //如果1秒后没有从ch中读取到数据，那么从t中读取，并进行下一步操作 } 这样的方法就可以让程序在等待 1 秒后继续执行，而不会因为 ch 读取等待而导致程序停滞，从而巧妙地实现了超时处理机制，这种方法不仅简单，在实际项目开发中也是非常实用的。">
+<meta name="description" content="4.4 select #  &hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.5-select
+ 4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句(可以是值也可以是表达式)，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
+func demo(number int){ switch{ case number &gt;= 90: fmt.Println(&#34;优秀&#34;) default: fmt.Println(&#34;太搓了&#34;) } } 而 select 用于处理通道，它的语法与 switch 非常类似。
+func main() { chanInt1, chanInt2 := make(chan int), make(chan int) go func() { defer close(chanInt1) defer close(chanInt2) chanInt1 &lt;- 1 chanInt2 &lt;- 2 }() time.Sleep(time.Millisecond) select { case data := &lt;-chanInt1: fmt.Println(data) case data := &lt;-chanInt2: fmt.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
-<meta property="og:description" content="4.4 select #  &hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go
- 4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
-内部可以是值，也可以是表达式，如果switch后未接参数，就必须是已有变量的表达式。
-switch number{ case number &gt;= 90: fmt.Println(&#34;优秀&#34;) case number &gt;= 80: fmt.Println(&#34;良好&#34;) case number &gt;= 60: fmt.Println(&#34;凑合&#34;) default: fmt.Println(&#34;太搓了&#34;) } 而 select 用于处理异步 IO 问题，它的语法与 switch 非常类似。
-4.3.4 超时机制 #  相反的，如果 channel 中的数据一直没有被读取，那么写入操作也会一直处于阻塞状态。如果不正确处理这个情况，很可能会导致整个 goroutine 锁死，这就是超时问题。Go 语言没有针对超时提供专门的处理机制，但是我们却可以利用 select 来巧妙地实现超时处理机制，下面看一个示例：
-t := make(chan bool) go func() { time.Sleep(1e9) //等待1秒  t &lt;- true }() select { case &lt;-ch: //从ch中读取数据  case &lt;-t: //如果1秒后没有从ch中读取到数据，那么从t中读取，并进行下一步操作 } 这样的方法就可以让程序在等待 1 秒后继续执行，而不会因为 ch 读取等待而导致程序停滞，从而巧妙地实现了超时处理机制，这种方法不仅简单，在实际项目开发中也是非常实用的。" />
+<meta property="og:description" content="4.4 select #  &hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.5-select
+ 4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句(可以是值也可以是表达式)，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
+func demo(number int){ switch{ case number &gt;= 90: fmt.Println(&#34;优秀&#34;) default: fmt.Println(&#34;太搓了&#34;) } } 而 select 用于处理通道，它的语法与 switch 非常类似。
+func main() { chanInt1, chanInt2 := make(chan int), make(chan int) go func() { defer close(chanInt1) defer close(chanInt2) chanInt1 &lt;- 1 chanInt2 &lt;- 2 }() time.Sleep(time.Millisecond) select { case data := &lt;-chanInt1: fmt.Println(data) case data := &lt;-chanInt2: fmt." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://golang.coding3min.com/4.concurrent/4-4-select/" /><meta property="article:section" content="4.concurrent" />
+<meta property="og:url" content="https://golang.coding3min.com/4.concurrent/4-5-select/" /><meta property="article:section" content="4.concurrent" />
 
 
 
-<title>4 4 Select | Go语言精进之路</title>
+<title>4 5 Select | Go语言精进之路</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.57d63aa141a8e579745a65c88b031196f495dc989fa6eeb991663bb8029416a3.js" integrity="sha256-V9Y6oUGo5Xl0WmXIiwMRlvSV3Jifpu65kWY7uAKUFqM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.b19bfb9a35ace719886df3a3f9dec186531e7614c415ab9d4c7ec3e23a2e18db.js" integrity="sha256-sZv7mjWs5xmIbfOj&#43;d7BhlMedhTEFaudTH7D4jouGNs=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -133,9 +129,11 @@ https://github.com/alex-shpak/hugo-book
 <li>
   <a href="/4.concurrent/4-3-channel/">4.3 channel</a></li>
 <li>
-  <a href="/4.concurrent/4-4-select/"class=active>4.4 select</a></li>
+  <a href="/4.concurrent/4-4-deadlock/">4.4 deadlock</a></li>
 <li>
-  <a href="/4.concurrent/4-5-timeout/">4.5 设置超时</a></li>
+  <a href="/4.concurrent/4-5-select/"class=active>4.5 select</a></li>
+<li>
+  <a href="/4.concurrent/4-6-timeout/">4.6 设置超时</a></li>
 <li>-并发安全</li>
 <li>-协程池</li>
 <li>-消费者生产者框架</li>
@@ -157,6 +155,7 @@ https://github.com/alex-shpak/hugo-book
 <li>-json库</li>
 <li>-http库</li>
 <li>跨平台编译</li>
+<li>模板</li>
 </ul>
 </li>
 <li><strong>第六章、调试与测试</strong>
@@ -206,7 +205,11 @@ https://github.com/alex-shpak/hugo-book
 <li><strong>第x章、微服务</strong></li>
 <li><strong>第x章、服务治理</strong></li>
 <li><strong>第x章、GO语言版本分析</strong></li>
-<li><strong>第x章、Go语言工程化实践</strong></li>
+<li><strong>第x章、Go语言工程化实践</strong>
+<ul>
+<li>构建约束</li>
+</ul>
+</li>
 <li><strong>番外1、拓展应用</strong>
 <ul>
 <li>
@@ -258,7 +261,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>4 4 Select</strong>
+  <strong>4 5 Select</strong>
 
   <label for="toc-control">
     
@@ -278,6 +281,7 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#431-select与switch">4.3.1 select与switch</a></li>
     <li><a href="#434-超时机制">4.3.4 超时机制</a></li>
     <li><a href="#432-select">4.3.2 select</a></li>
+    <li><a href="#泄露防止">泄露防止</a></li>
     <li><a href="#小结">小结</a></li>
   </ul>
 </nav>
@@ -300,25 +304,41 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#%e6%9c%ac%e8%8a%82%e6%ad%a3%e5%9c%a8%e7%bc%96%e5%86%99%e6%9c%aa%e5%ae%8c%e5%be%85%e7%bb%ad%e5%82%ac%e6%9b%b4%e8%af%b7%e7%95%99%e8%a8%80%e6%88%91%e4%bc%9a%e6%94%b6%e5%88%b0%e9%82%ae%e4%bb%b6">#</a>
 </h2>
 <blockquote>
-<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go">https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go</a></p>
+<p>本节源码位置 <a href="https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.5-select">https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.5-select</a></p>
 </blockquote>
 <h2 id="431-select与switch">
   4.3.1 select与switch
   <a class="anchor" href="#431-select%e4%b8%8eswitch">#</a>
 </h2>
-<p>让我们来复习一下<code>switch</code>语句，在<code>switch</code>语句中，会逐个匹配<code>case</code>语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出<code>switch</code>。</p>
-<p>内部可以是值，也可以是表达式，如果<code>switch</code>后未接参数，就必须是已有变量的表达式。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">switch</span> <span style="color:#a6e22e">number</span>{
-    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">90</span>:
-    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;优秀&#34;</span>)
-    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">80</span>:
-    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;良好&#34;</span>)
-    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">60</span>:
-    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;凑合&#34;</span>)
-    <span style="color:#66d9ef">default</span>:
-    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;太搓了&#34;</span>)
+<p>让我们来复习一下<code>switch</code>语句，在<code>switch</code>语句中，会逐个匹配<code>case</code>语句(可以是值也可以是表达式)，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出<code>switch</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">demo</span>(<span style="color:#a6e22e">number</span> <span style="color:#66d9ef">int</span>){
+    <span style="color:#66d9ef">switch</span>{
+        <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">number</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">90</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;优秀&#34;</span>)
+        <span style="color:#66d9ef">default</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;太搓了&#34;</span>)
+    }
 }
-</code></pre></div><p>而 <code>select</code> 用于处理异步 <code>IO</code> 问题，它的语法与 <code>switch</code> 非常类似。</p>
+</code></pre></div><p>而 <code>select</code> 用于处理通道，它的语法与 <code>switch</code> 非常类似。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">chanInt1</span>, <span style="color:#a6e22e">chanInt2</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>), make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
+	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+		<span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">chanInt1</span>)
+		<span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">chanInt2</span>)
+		<span style="color:#a6e22e">chanInt1</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>
+		<span style="color:#a6e22e">chanInt2</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">2</span>
+	}()
+	<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Millisecond</span>)
+	<span style="color:#66d9ef">select</span> {
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">chanInt1</span>:
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">data</span>)
+	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">data</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">chanInt2</span>:
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">data</span>)
+	<span style="color:#66d9ef">default</span>:
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;全部阻塞&#34;</span>)
+	}
+}
+</code></pre></div><p>比如这样接收数值</p>
 <h2 id="434-超时机制">
   4.3.4 超时机制
   <a class="anchor" href="#434-%e8%b6%85%e6%97%b6%e6%9c%ba%e5%88%b6">#</a>
@@ -376,7 +396,12 @@ https://github.com/alex-shpak/hugo-book
 received one
 received two
 该函数执行完成耗时： 2.004695535s
-</code></pre></div><h2 id="小结">
+</code></pre></div><h2 id="泄露防止">
+  泄露防止
+  <a class="anchor" href="#%e6%b3%84%e9%9c%b2%e9%98%b2%e6%ad%a2">#</a>
+</h2>
+<p>及时通知select</p>
+<h2 id="小结">
   小结
   <a class="anchor" href="#%e5%b0%8f%e7%bb%93">#</a>
 </h2>
@@ -406,7 +431,7 @@ received two
 
 
   <div>
-    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/4.concurrent/4-4-select.md" target="_blank" rel="noopener">
+    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/4.concurrent/4-5-select.md" target="_blank" rel="noopener">
       <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
       <span>Edit this page</span>
     </a>
@@ -441,6 +466,7 @@ received two
     <li><a href="#431-select与switch">4.3.1 select与switch</a></li>
     <li><a href="#434-超时机制">4.3.4 超时机制</a></li>
     <li><a href="#432-select">4.3.2 select</a></li>
+    <li><a href="#泄露防止">泄露防止</a></li>
     <li><a href="#小结">小结</a></li>
   </ul>
 </nav>

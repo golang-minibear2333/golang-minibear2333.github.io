@@ -48,13 +48,15 @@
   </url><url>
     <loc>https://golang.coding3min.com/4.concurrent/4-3-channel/</loc>
   </url><url>
-    <loc>https://golang.coding3min.com/4.concurrent/4-4-select/</loc>
+    <loc>https://golang.coding3min.com/4.concurrent/4-4-deadlock/</loc>
   </url><url>
-    <loc>https://golang.coding3min.com/4.concurrent/4-5-timeout/</loc>
+    <loc>https://golang.coding3min.com/4.concurrent/4-5-select/</loc>
   </url><url>
-    <loc>https://golang.coding3min.com/4.concurrent/4-6-%E6%B1%A0/</loc>
+    <loc>https://golang.coding3min.com/4.concurrent/4-6-timeout/</loc>
   </url><url>
-    <loc>https://golang.coding3min.com/4.concurrent/4-7-%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</loc>
+    <loc>https://golang.coding3min.com/4.concurrent/4-7-%E6%B1%A0/</loc>
+  </url><url>
+    <loc>https://golang.coding3min.com/4.concurrent/%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</loc>
   </url><url>
     <loc>https://golang.coding3min.com/books-share/</loc>
     <priority>0</priority>
@@ -81,6 +83,8 @@
   </url><url>
     <loc>https://golang.coding3min.com/tools/readme/</loc>
   </url><url>
+    <loc>https://golang.coding3min.com/%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%AE%9E%E8%B7%B5/%E6%9E%84%E5%BB%BA%E7%BA%A6%E6%9D%9F/</loc>
+  </url><url>
     <loc>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/flag%E5%8C%85%E8%AF%BB%E5%8F%96%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%85%8D%E7%BD%AE/</loc>
   </url><url>
     <loc>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/</loc>
@@ -100,6 +104,8 @@
     <loc>https://golang.coding3min.com/impossible/</loc>
   </url><url>
     <loc>https://golang.coding3min.com/tools/</loc>
+  </url><url>
+    <loc>https://golang.coding3min.com/%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%AE%9E%E8%B7%B5/</loc>
   </url><url>
     <loc>https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</loc>
   </url>

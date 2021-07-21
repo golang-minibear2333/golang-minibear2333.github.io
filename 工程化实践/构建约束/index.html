@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  ">
+<meta name="description" content="nosplit 禁止内联 noescape 禁止逃逸 gengrate 生成命令 指定构建的版本，通过文件名或者注释约定代码在指定平台运行时起作用 embed">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
-<meta property="og:description" content="&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  " />
+<meta property="og:description" content="nosplit 禁止内联 noescape 禁止逃逸 gengrate 生成命令 指定构建的版本，通过文件名或者注释约定代码在指定平台运行时起作用 embed" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://golang.coding3min.com/4.concurrent/4-6-%E6%B1%A0/" /><meta property="article:section" content="4.concurrent" />
+<meta property="og:url" content="https://golang.coding3min.com/%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%AE%9E%E8%B7%B5/%E6%9E%84%E5%BB%BA%E7%BA%A6%E6%9D%9F/" /><meta property="article:section" content="工程化实践" />
 
 
 
-<title>4 6 池 | Go语言精进之路</title>
+<title>构建约束 | Go语言精进之路</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.57d63aa141a8e579745a65c88b031196f495dc989fa6eeb991663bb8029416a3.js" integrity="sha256-V9Y6oUGo5Xl0WmXIiwMRlvSV3Jifpu65kWY7uAKUFqM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.b19bfb9a35ace719886df3a3f9dec186531e7614c415ab9d4c7ec3e23a2e18db.js" integrity="sha256-sZv7mjWs5xmIbfOj&#43;d7BhlMedhTEFaudTH7D4jouGNs=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -123,9 +123,11 @@ https://github.com/alex-shpak/hugo-book
 <li>
   <a href="/4.concurrent/4-3-channel/">4.3 channel</a></li>
 <li>
-  <a href="/4.concurrent/4-4-select/">4.4 select</a></li>
+  <a href="/4.concurrent/4-4-deadlock/">4.4 deadlock</a></li>
 <li>
-  <a href="/4.concurrent/4-5-timeout/">4.5 设置超时</a></li>
+  <a href="/4.concurrent/4-5-select/">4.5 select</a></li>
+<li>
+  <a href="/4.concurrent/4-6-timeout/">4.6 设置超时</a></li>
 <li>-并发安全</li>
 <li>-协程池</li>
 <li>-消费者生产者框架</li>
@@ -147,6 +149,7 @@ https://github.com/alex-shpak/hugo-book
 <li>-json库</li>
 <li>-http库</li>
 <li>跨平台编译</li>
+<li>模板</li>
 </ul>
 </li>
 <li><strong>第六章、调试与测试</strong>
@@ -196,7 +199,11 @@ https://github.com/alex-shpak/hugo-book
 <li><strong>第x章、微服务</strong></li>
 <li><strong>第x章、服务治理</strong></li>
 <li><strong>第x章、GO语言版本分析</strong></li>
-<li><strong>第x章、Go语言工程化实践</strong></li>
+<li><strong>第x章、Go语言工程化实践</strong>
+<ul>
+<li>构建约束</li>
+</ul>
+</li>
 <li><strong>番外1、拓展应用</strong>
 <ul>
 <li>
@@ -248,7 +255,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>4 6 池</strong>
+  <strong>构建约束</strong>
 
   <label for="toc-control">
     
@@ -262,11 +269,7 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#本节正在编写未完待续催更请留言我会收到邮件"><strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong></a></li>
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
 
 
 
@@ -277,10 +280,10 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h2 id="本节正在编写未完待续催更请留言我会收到邮件">
-  <strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong>
-  <a class="anchor" href="#%e6%9c%ac%e8%8a%82%e6%ad%a3%e5%9c%a8%e7%bc%96%e5%86%99%e6%9c%aa%e5%ae%8c%e5%be%85%e7%bb%ad%e5%82%ac%e6%9b%b4%e8%af%b7%e7%95%99%e8%a8%80%e6%88%91%e4%bc%9a%e6%94%b6%e5%88%b0%e9%82%ae%e4%bb%b6">#</a>
-</h2>
+  <article class="markdown"><p>nosplit  禁止内联   noescape  禁止逃逸            <br>
+gengrate  生成命令
+指定构建的版本，通过文件名或者注释约定代码在指定平台运行时起作用
+embed</p>
 </article>
  
       <div class="book-footer justify-between"></div>
@@ -307,7 +310,7 @@ https://github.com/alex-shpak/hugo-book
 
 
   <div>
-    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/4.concurrent/4-6-%e6%b1%a0.md" target="_blank" rel="noopener">
+    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/%e5%b7%a5%e7%a8%8b%e5%8c%96%e5%ae%9e%e8%b7%b5/%e6%9e%84%e5%bb%ba%e7%ba%a6%e6%9d%9f.md" target="_blank" rel="noopener">
       <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
       <span>Edit this page</span>
     </a>
@@ -336,11 +339,7 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#本节正在编写未完待续催更请留言我会收到邮件"><strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong></a></li>
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
 
 
  

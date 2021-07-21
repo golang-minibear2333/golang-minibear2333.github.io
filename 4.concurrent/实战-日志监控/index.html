@@ -3,31 +3,15 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="文档 #   不刻意制定详细文档 编码级别文档化，支持一键导出文档  统一的标准和习惯，提高可读性 #  三个统一
- 统一的日志 统一的接口规范：错误码、返回格式、国际化 统一编码习惯  统一编码习惯 #  变量常量
- 变量必须见名知义不得用拼音，且长度在 3-20 个字母 名词必须单数 常量必须全大写  所有程序必须有注释
-提交记录必须指明 tapd 单号，功能，更新记录
-代码文件名
- 必须见名知义，保证内部代码单一职责 文件夹必须与包名保持一致，全小写，尽量使用短命名，不能使用下划线、中划线等字符  函数
- 单个函数长度不超过 50 行 参数个数不要超过 5 个（参数过多通常意味着缺少封装，不易维护，容易出错） 函数返回值个数不要超过 3 个，如果超过，建议将其中关系密切的返回值参数封装成一个结构体。  格式化要求 提交代码时，必须使用 gofmt 对代码进行格式化 提交代码时，必须使用 golint 对代码进行检查。 字符串形式的 json 时，使用反单引号，而不是双引号。
-&#34;{\&#34;key\&#34;:\&#34;value\&#34;}&#34; 改为格式更清晰的：
-` { &#34;key&#34;:&#34;value&#34; } ` 接入自动格式化检查 #  接入自动化代码缺陷扫描 #  ">
+<meta name="description" content="&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  ">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="" />
-<meta property="og:description" content="文档 #   不刻意制定详细文档 编码级别文档化，支持一键导出文档  统一的标准和习惯，提高可读性 #  三个统一
- 统一的日志 统一的接口规范：错误码、返回格式、国际化 统一编码习惯  统一编码习惯 #  变量常量
- 变量必须见名知义不得用拼音，且长度在 3-20 个字母 名词必须单数 常量必须全大写  所有程序必须有注释
-提交记录必须指明 tapd 单号，功能，更新记录
-代码文件名
- 必须见名知义，保证内部代码单一职责 文件夹必须与包名保持一致，全小写，尽量使用短命名，不能使用下划线、中划线等字符  函数
- 单个函数长度不超过 50 行 参数个数不要超过 5 个（参数过多通常意味着缺少封装，不易维护，容易出错） 函数返回值个数不要超过 3 个，如果超过，建议将其中关系密切的返回值参数封装成一个结构体。  格式化要求 提交代码时，必须使用 gofmt 对代码进行格式化 提交代码时，必须使用 golint 对代码进行检查。 字符串形式的 json 时，使用反单引号，而不是双引号。
-&#34;{\&#34;key\&#34;:\&#34;value\&#34;}&#34; 改为格式更清晰的：
-` { &#34;key&#34;:&#34;value&#34; } ` 接入自动格式化检查 #  接入自动化代码缺陷扫描 #  " />
+<meta property="og:description" content="&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://golang.coding3min.com/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/" /><meta property="article:section" content="番外.常用操作" />
+<meta property="og:url" content="https://golang.coding3min.com/4.concurrent/%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/" /><meta property="article:section" content="4.concurrent" />
 
 
 
-<title>Go代码基本标准规范 | Go语言精进之路</title>
+<title>实战 日志监控 | Go语言精进之路</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
@@ -153,7 +137,7 @@ https://github.com/alex-shpak/hugo-book
 <li><strong>第五章、标准库</strong>
 <ul>
 <li>
-  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/"class=active>Go代码基本标准规范</a></li>
+  <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E4%BB%A3%E7%A0%81%E5%9F%BA%E6%9C%AC%E6%A0%87%E5%87%86%E8%A7%84%E8%8C%83/">Go代码基本标准规范</a></li>
 <li>
   <a href="/%E7%95%AA%E5%A4%96.%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/go%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E5%A4%A7%E5%85%A8/">文件操作</a></li>
 <li>
@@ -271,7 +255,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>Go代码基本标准规范</strong>
+  <strong>实战 日志监控</strong>
 
   <label for="toc-control">
     
@@ -287,11 +271,7 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#文档">文档</a></li>
-    <li><a href="#统一的标准和习惯提高可读性">统一的标准和习惯，提高可读性</a></li>
-    <li><a href="#统一编码习惯">统一编码习惯</a></li>
-    <li><a href="#接入自动格式化检查">接入自动格式化检查</a></li>
-    <li><a href="#接入自动化代码缺陷扫描">接入自动化代码缺陷扫描</a></li>
+    <li><a href="#本节正在编写未完待续催更请留言我会收到邮件"><strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong></a></li>
   </ul>
 </nav>
 
@@ -304,65 +284,9 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h2 id="文档">
-  文档
-  <a class="anchor" href="#%e6%96%87%e6%a1%a3">#</a>
-</h2>
-<ul>
-<li>不刻意制定详细文档</li>
-<li>编码级别文档化，支持一键导出文档</li>
-</ul>
-<h2 id="统一的标准和习惯提高可读性">
-  统一的标准和习惯，提高可读性
-  <a class="anchor" href="#%e7%bb%9f%e4%b8%80%e7%9a%84%e6%a0%87%e5%87%86%e5%92%8c%e4%b9%a0%e6%83%af%e6%8f%90%e9%ab%98%e5%8f%af%e8%af%bb%e6%80%a7">#</a>
-</h2>
-<p>三个统一</p>
-<ul>
-<li>统一的日志</li>
-<li>统一的接口规范：错误码、返回格式、国际化</li>
-<li>统一编码习惯</li>
-</ul>
-<h2 id="统一编码习惯">
-  统一编码习惯
-  <a class="anchor" href="#%e7%bb%9f%e4%b8%80%e7%bc%96%e7%a0%81%e4%b9%a0%e6%83%af">#</a>
-</h2>
-<p><strong>变量常量</strong></p>
-<ul>
-<li>变量必须见名知义不得用拼音，且长度在 3-20 个字母</li>
-<li>名词必须单数</li>
-<li>常量必须全大写</li>
-</ul>
-<p>所有程序<strong>必须有注释</strong></p>
-<p>提交记录必须指明 <code>tapd</code> 单号，功能，更新记录</p>
-<p><strong>代码文件名</strong></p>
-<ul>
-<li>必须<strong>见名知义</strong>，保证内部代码<strong>单一职责</strong></li>
-<li>文件夹必须<strong>与包名</strong>保持<strong>一致</strong>，<strong>全小写</strong>，尽量使用<strong>短命名</strong>，不能使用下划线、中划线等字符</li>
-</ul>
-<p><strong>函数</strong></p>
-<ul>
-<li>单个函数长度不超过 <code>50</code> 行</li>
-<li>参数个数不要超过 <code>5</code> 个（参数过多通常意味着缺少封装，不易维护，容易出错）</li>
-<li>函数返回值个数不要超过 <code>3</code> 个，如果超过，建议将其中关系密切的返回值参数封装成一个结构体。</li>
-</ul>
-<p><strong>格式化要求</strong>
-提交代码时，必须使用 <code>gofmt</code> 对代码进行格式化
-提交代码时，必须使用 <code>golint</code> 对代码进行检查。
-字符串形式的 <code>json</code> 时，使用反单引号，而不是双引号。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#e6db74">&#34;{\&#34;key\&#34;:\&#34;value\&#34;}&#34;</span>
-</code></pre></div><p>改为格式更清晰的：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#e6db74">`
-</span><span style="color:#e6db74">{
-</span><span style="color:#e6db74">    &#34;key&#34;:&#34;value&#34;
-</span><span style="color:#e6db74">}
-</span><span style="color:#e6db74">`</span>
-</code></pre></div><h2 id="接入自动格式化检查">
-  接入自动格式化检查
-  <a class="anchor" href="#%e6%8e%a5%e5%85%a5%e8%87%aa%e5%8a%a8%e6%a0%bc%e5%bc%8f%e5%8c%96%e6%a3%80%e6%9f%a5">#</a>
-</h2>
-<h2 id="接入自动化代码缺陷扫描">
-  接入自动化代码缺陷扫描
-  <a class="anchor" href="#%e6%8e%a5%e5%85%a5%e8%87%aa%e5%8a%a8%e5%8c%96%e4%bb%a3%e7%a0%81%e7%bc%ba%e9%99%b7%e6%89%ab%e6%8f%8f">#</a>
+  <article class="markdown"><h2 id="本节正在编写未完待续催更请留言我会收到邮件">
+  <strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong>
+  <a class="anchor" href="#%e6%9c%ac%e8%8a%82%e6%ad%a3%e5%9c%a8%e7%bc%96%e5%86%99%e6%9c%aa%e5%ae%8c%e5%be%85%e7%bb%ad%e5%82%ac%e6%9b%b4%e8%af%b7%e7%95%99%e8%a8%80%e6%88%91%e4%bc%9a%e6%94%b6%e5%88%b0%e9%82%ae%e4%bb%b6">#</a>
 </h2>
 </article>
  
@@ -390,7 +314,7 @@ https://github.com/alex-shpak/hugo-book
 
 
   <div>
-    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/%e7%95%aa%e5%a4%96.%e5%b8%b8%e7%94%a8%e6%93%8d%e4%bd%9c/Go%e4%bb%a3%e7%a0%81%e5%9f%ba%e6%9c%ac%e6%a0%87%e5%87%86%e8%a7%84%e8%8c%83.md" target="_blank" rel="noopener">
+    <a class="flex align-center" href="https://github.com/golang-minibear2333/golang/edit/master/blog/content/4.concurrent/%e5%ae%9e%e6%88%98-%e6%97%a5%e5%bf%97%e7%9b%91%e6%8e%a7.md" target="_blank" rel="noopener">
       <img src="/svg/edit.svg" class="book-icon" alt="Edit" />
       <span>Edit this page</span>
     </a>
@@ -421,11 +345,7 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#文档">文档</a></li>
-    <li><a href="#统一的标准和习惯提高可读性">统一的标准和习惯，提高可读性</a></li>
-    <li><a href="#统一编码习惯">统一编码习惯</a></li>
-    <li><a href="#接入自动格式化检查">接入自动格式化检查</a></li>
-    <li><a href="#接入自动化代码缺陷扫描">接入自动化代码缺陷扫描</a></li>
+    <li><a href="#本节正在编写未完待续催更请留言我会收到邮件"><strong>&hellip;本节正在编写，未完待续，催更请留言，我会收到邮件</strong></a></li>
   </ul>
 </nav>
 

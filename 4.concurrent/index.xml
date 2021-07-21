@@ -14,10 +14,10 @@
       <guid>https://golang.coding3min.com/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/</guid>
       <description>4.1 go 语言中的并发特性 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.1-goroutine/
  以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。
-go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 chan 相互配合，这决定了他的先天优势。
+go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 channel 相互配合，这决定了他的先天优势。
 goroutine 也就是go协程，概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
 4.1.1 他和线程对比 #  从使用上讲
- 比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 chan 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说）  从其实现上讲
+ 比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 channel 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说）  从其实现上讲
  从资源上讲，线程的栈内存大小一般是固定的一般为 2MB ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 goroutine 栈内存是可变的，初始一般为 2KB ，随着需求可以扩大达到 1GB。 所以 goroutine 十分的轻量级，且能满足不同的需求。 从调度上讲，线程的调度由 OS 的内核完成；线程的切换需要 CPU 寄存器 和 内存的数据交换 ，从而切换不同的线程上下文。 其触发方式为 CPU时钟 , 而 goroutine 的调度则比较轻量级，由自身的调度器完成。 协程同线程的关系，有些类似于 线程同进程的关系。  4.</description>
     </item>
     
@@ -57,24 +57,36 @@ a := make(chan int) //初始化一个int型的名为a的channel b := make(chan f
     
     <item>
       <title></title>
-      <link>https://golang.coding3min.com/4.concurrent/4-4-select/</link>
+      <link>https://golang.coding3min.com/4.concurrent/4-4-deadlock/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://golang.coding3min.com/4.concurrent/4-4-select/</guid>
-      <description>4.4 select #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/select.go
- 4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
-内部可以是值，也可以是表达式，如果switch后未接参数，就必须是已有变量的表达式。
-switch number{ case number &amp;gt;= 90: fmt.Println(&amp;#34;优秀&amp;#34;) case number &amp;gt;= 80: fmt.Println(&amp;#34;良好&amp;#34;) case number &amp;gt;= 60: fmt.Println(&amp;#34;凑合&amp;#34;) default: fmt.Println(&amp;#34;太搓了&amp;#34;) } 而 select 用于处理异步 IO 问题，它的语法与 switch 非常类似。
-4.3.4 超时机制 #  相反的，如果 channel 中的数据一直没有被读取，那么写入操作也会一直处于阻塞状态。如果不正确处理这个情况，很可能会导致整个 goroutine 锁死，这就是超时问题。Go 语言没有针对超时提供专门的处理机制，但是我们却可以利用 select 来巧妙地实现超时处理机制，下面看一个示例：
-t := make(chan bool) go func() { time.Sleep(1e9) //等待1秒  t &amp;lt;- true }() select { case &amp;lt;-ch: //从ch中读取数据  case &amp;lt;-t: //如果1秒后没有从ch中读取到数据，那么从t中读取，并进行下一步操作 } 这样的方法就可以让程序在等待 1 秒后继续执行，而不会因为 ch 读取等待而导致程序停滞，从而巧妙地实现了超时处理机制，这种方法不仅简单，在实际项目开发中也是非常实用的。</description>
+      <guid>https://golang.coding3min.com/4.concurrent/4-4-deadlock/</guid>
+      <description>4.4 deadlock #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.4-deadlock/
+ 4.4.1 什么时候会导致死锁 #  在计算机组成原理里说过 死锁有三个必要条件他们分别是 循环等待、资源共享、非抢占式，在并发中出现通道死锁只有两种情况：
+ 数据要发送，但是没有人接收 数据要接收，但是没有人发送  4.4.2 发送单个值时的死锁 #  牢记这两点问题就很清晰了，复习下之前的例子，会死锁
+a := make(chan int) a &amp;lt;- 1 //将数据写入channel z := &amp;lt;-a //从channel中读取数据  有且只有一个协程时，无缓冲的通道 无论是先发送会阻塞在发送，先接收会阻塞在接收处。 因为发送操作在接收者准备好之前是阻塞的，接收操作在发送之前是阻塞的， 解决办法就是改为缓冲通道，或者使用协程配对  解决方法一,协程配对，先发送还是先接收无所谓只要配对就好
+chanInt := make(chan int) go func() { chanInt &amp;lt;- 1 }() res := &amp;lt;-chanInt 解决方法二，缓冲通道
+chanInt := make(chan int,1) chanInt &amp;lt;- 2 res := &amp;lt;-chanInt  缓冲通道内部的消息数量用len()函数可以测试出来 缓冲通道的容量可以用cap()测试出来 在满足cap&amp;gt;len时候，因为没有满，发送不会阻塞 在len&amp;gt;0时，因为不为空，所以接收不会阻塞  使用缓冲通道可以让生产者和消费者减少阻塞的可能性，对异步操作更友好，不用等待对方准备，但是容量不应设置过大，不然会占用较多内存。</description>
     </item>
     
     <item>
       <title></title>
-      <link>https://golang.coding3min.com/4.concurrent/4-5-timeout/</link>
+      <link>https://golang.coding3min.com/4.concurrent/4-5-select/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://golang.coding3min.com/4.concurrent/4-5-timeout/</guid>
+      <guid>https://golang.coding3min.com/4.concurrent/4-5-select/</guid>
+      <description>4.4 select #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #   本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.5-select
+ 4.3.1 select与switch #  让我们来复习一下switch语句，在switch语句中，会逐个匹配case语句(可以是值也可以是表达式)，一个一个的判断过去，直到有符合的语句存在，执行匹配的语句内容后跳出switch。
+func demo(number int){ switch{ case number &amp;gt;= 90: fmt.Println(&amp;#34;优秀&amp;#34;) default: fmt.Println(&amp;#34;太搓了&amp;#34;) } } 而 select 用于处理通道，它的语法与 switch 非常类似。
+func main() { chanInt1, chanInt2 := make(chan int), make(chan int) go func() { defer close(chanInt1) defer close(chanInt2) chanInt1 &amp;lt;- 1 chanInt2 &amp;lt;- 2 }() time.Sleep(time.Millisecond) select { case data := &amp;lt;-chanInt1: fmt.Println(data) case data := &amp;lt;-chanInt2: fmt.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://golang.coding3min.com/4.concurrent/4-6-timeout/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://golang.coding3min.com/4.concurrent/4-6-timeout/</guid>
       <description>4.4 定时器 #  &amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  超时关闭 #   完整代码
 package main import &amp;#34;time&amp;#34; func main() { t := make(chan bool) ch := make(chan int) defer func() { close(ch) close(t) }() go func() { time.Sleep(1e9) //等待1秒 	t &amp;lt;- true }() go func() { time.Sleep(time.Second * 2) ch &amp;lt;- 123 }() select { case &amp;lt;-ch: //从ch中读取数据  case &amp;lt;-t: //如果1秒后没有从ch中读取到数据，那么从t中读取，并进行下一步操作 	} } 可热更新的定时器 #  废话不多说，直接上代码
 package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) type Server struct { tk *time.</description>
@@ -82,19 +94,19 @@ package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) type Server
     
     <item>
       <title></title>
-      <link>https://golang.coding3min.com/4.concurrent/4-6-%E6%B1%A0/</link>
+      <link>https://golang.coding3min.com/4.concurrent/4-7-%E6%B1%A0/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://golang.coding3min.com/4.concurrent/4-6-%E6%B1%A0/</guid>
+      <guid>https://golang.coding3min.com/4.concurrent/4-7-%E6%B1%A0/</guid>
       <description>&amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  </description>
     </item>
     
     <item>
       <title></title>
-      <link>https://golang.coding3min.com/4.concurrent/4-7-%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</link>
+      <link>https://golang.coding3min.com/4.concurrent/%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://golang.coding3min.com/4.concurrent/4-7-%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</guid>
+      <guid>https://golang.coding3min.com/4.concurrent/%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</guid>
       <description>&amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #  </description>
     </item>
     

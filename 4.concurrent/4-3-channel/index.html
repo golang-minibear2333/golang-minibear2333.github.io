@@ -40,7 +40,7 @@ a := make(chan int) //初始化一个int型的名为a的channel b := make(chan f
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css" integrity="sha256-lYzqeCdiHW&#43;8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin="anonymous">
   <script defer src="/flexsearch.min.js"></script>
-  <script defer src="/en.search.min.57d63aa141a8e579745a65c88b031196f495dc989fa6eeb991663bb8029416a3.js" integrity="sha256-V9Y6oUGo5Xl0WmXIiwMRlvSV3Jifpu65kWY7uAKUFqM=" crossorigin="anonymous"></script>
+  <script defer src="/en.search.min.b19bfb9a35ace719886df3a3f9dec186531e7614c415ab9d4c7ec3e23a2e18db.js" integrity="sha256-sZv7mjWs5xmIbfOj&#43;d7BhlMedhTEFaudTH7D4jouGNs=" crossorigin="anonymous"></script>
 
   <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
 <!--
@@ -147,9 +147,11 @@ https://github.com/alex-shpak/hugo-book
 <li>
   <a href="/4.concurrent/4-3-channel/"class=active>4.3 channel</a></li>
 <li>
-  <a href="/4.concurrent/4-4-select/">4.4 select</a></li>
+  <a href="/4.concurrent/4-4-deadlock/">4.4 deadlock</a></li>
 <li>
-  <a href="/4.concurrent/4-5-timeout/">4.5 设置超时</a></li>
+  <a href="/4.concurrent/4-5-select/">4.5 select</a></li>
+<li>
+  <a href="/4.concurrent/4-6-timeout/">4.6 设置超时</a></li>
 <li>-并发安全</li>
 <li>-协程池</li>
 <li>-消费者生产者框架</li>
@@ -171,6 +173,7 @@ https://github.com/alex-shpak/hugo-book
 <li>-json库</li>
 <li>-http库</li>
 <li>跨平台编译</li>
+<li>模板</li>
 </ul>
 </li>
 <li><strong>第六章、调试与测试</strong>
@@ -220,7 +223,11 @@ https://github.com/alex-shpak/hugo-book
 <li><strong>第x章、微服务</strong></li>
 <li><strong>第x章、服务治理</strong></li>
 <li><strong>第x章、GO语言版本分析</strong></li>
-<li><strong>第x章、Go语言工程化实践</strong></li>
+<li><strong>第x章、Go语言工程化实践</strong>
+<ul>
+<li>构建约束</li>
+</ul>
+</li>
 <li><strong>番外1、拓展应用</strong>
 <ul>
 <li>
@@ -349,10 +356,10 @@ https://github.com/alex-shpak/hugo-book
 </h2>
 <p>我们进一步体验一下无缓冲 channel 会发生什么问题，同时熟悉下用法，示例：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">pendingForever</span>() {
-<span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
-<span style="color:#a6e22e">a</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>   <span style="color:#75715e">//将数据写入channel
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">z</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">a</span> <span style="color:#75715e">//从channel中读取数据
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">z</span>)
+    <span style="color:#a6e22e">a</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
+    <span style="color:#a6e22e">a</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>   <span style="color:#75715e">//将数据写入channel
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">z</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">a</span> <span style="color:#75715e">//从channel中读取数据
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">z</span>)
 }
 </code></pre></div><ul>
 <li>观察上面三行代码，第 2 行往 <code>channel</code> 内写入了数据，第 3 行从 <code>channel</code> 中读取了数据</li>
@@ -360,35 +367,35 @@ https://github.com/alex-shpak/hugo-book
 </ul>
 <p>我们说过 <code>channel</code> 是用来给不同 <code>goroutine</code> 通信的，所以是不能在同一个协程又发送又接收，这根本就达不到隧道通信的效果。所以上面的代码，会死锁：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">fatal</span> <span style="color:#66d9ef">error</span>: <span style="color:#a6e22e">all</span> <span style="color:#a6e22e">goroutines</span> <span style="color:#a6e22e">are</span> <span style="color:#a6e22e">asleep</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">deadlock</span>!
-
+	
 <span style="color:#a6e22e">goroutine</span> <span style="color:#ae81ff">1</span> [<span style="color:#66d9ef">chan</span> <span style="color:#a6e22e">send</span>]:
 <span style="color:#a6e22e">main</span>.<span style="color:#a6e22e">main</span>()
-<span style="color:#f92672">.../</span><span style="color:#ae81ff">4.</span><span style="color:#a6e22e">concurrent</span><span style="color:#f92672">/</span><span style="color:#a6e22e">channel</span>.<span style="color:#66d9ef">go</span>:<span style="color:#ae81ff">7</span> <span style="color:#f92672">+</span><span style="color:#ae81ff">0x59</span>
+    <span style="color:#f92672">.../</span><span style="color:#ae81ff">4.</span><span style="color:#a6e22e">concurrent</span><span style="color:#f92672">/</span><span style="color:#a6e22e">channel</span>.<span style="color:#66d9ef">go</span>:<span style="color:#ae81ff">7</span> <span style="color:#f92672">+</span><span style="color:#ae81ff">0x59</span>
 </code></pre></div><p>死锁的原因是没有其他协程来接收数据，隧道因为是无缓冲的，所以直接永远的阻塞在发送方。</p>
 <p>要解决这个问题也好办。放到不同 <code>goroutine</code> 里就可以。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">normal</span>() {
-<span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
-<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-<span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>
-}()
-
-<span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">chanInt</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">res</span>)
+    <span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
+    <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+    <span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>
+    }()
+    
+    <span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">chanInt</span>
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">res</span>)
 }
 </code></pre></div><p>输出<code>1</code>。无缓冲通道在无数据发送时，接收端会阻塞，直到有新数据发送过来为止。</p>
 <p>上面的代码，一个发送一个接收，而实际使用中数据往往是连续不断发送的。来看一段代码：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">standard</span>() {
-<span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
-<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-<span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">chanInt</span>)
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">produceData</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">produceData</span> {
-<span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">v</span>
-}
-}()
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">chanInt</span> {
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">v</span>)
-}
+    <span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>)
+    <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+        <span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">chanInt</span>)
+        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">produceData</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>}
+        <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">produceData</span> {
+            <span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">v</span>
+        }
+    }()
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">chanInt</span> {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">v</span>)
+    }
 }
 </code></pre></div><p>输出</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#ae81ff">1</span>
@@ -411,14 +418,14 @@ https://github.com/alex-shpak/hugo-book
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>
 </code></pre></div><p>通过查看第二个返回值的 <code>bool</code> 值即可判断 <code>channel</code> 是否关闭，若为 <code>false</code> 则表示 <code>channel</code> 被关闭，反之则没有关闭（使用频率不高，了解即可）</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">chanInt</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;chanInt is closed&#34;</span>)
-<span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">chanInt</span>)
-<span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>
-}()
-<span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">chanInt</span>
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">res</span>)
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">chanInt</span> <span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span> = make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
+    <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+        <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;chanInt is closed&#34;</span>)
+        <span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">chanInt</span>)
+        <span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">1</span>
+    }()
+    <span style="color:#a6e22e">res</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">chanInt</span>
+    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">res</span>)
 }
 </code></pre></div><p>输出</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">chanInt</span> <span style="color:#a6e22e">is</span> <span style="color:#a6e22e">closed</span>
@@ -437,36 +444,36 @@ https://github.com/alex-shpak/hugo-book
 <p>我们结合前面知识，来实战练习一下！</p>
 <p>功能：实现一个多发送，多接收的例子。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">c</span> <span style="color:#66d9ef">chan</span><span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">wg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>) {
-<span style="color:#a6e22e">c</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>()
-<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+    <span style="color:#a6e22e">c</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>()
+    <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
 }
 </code></pre></div><ul>
 <li>发送端随机生成数字，并声明一个仅发送的单向通道</li>
 <li>使用<code>sync.WaitGroup</code>做等待（忘记的回顾上一节哈！）</li>
 </ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">received</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">&lt;-</span><span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">wg</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>) {
-<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">gotData</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">c</span> {
-<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">gotData</span>)
-}
-<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
+    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">gotData</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">c</span> {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">gotData</span>)    
+    }
+    <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
 }
 </code></pre></div><ul>
 <li>接收端使用<code>range</code>来接收数字并打印</li>
 </ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-<span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
-<span style="color:#a6e22e">done</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
-<span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">done</span>)
-<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-<span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">chanInt</span>)
-<span style="color:#75715e">// 发送
-</span><span style="color:#75715e"></span>}()
-<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-<span style="color:#f92672">...</span>
-<span style="color:#75715e">// 接收
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
-}()
-<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">done</span>
+    <span style="color:#a6e22e">chanInt</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#ae81ff">10</span>)
+    <span style="color:#a6e22e">done</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
+    <span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">done</span>)
+    <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+        <span style="color:#66d9ef">defer</span> close(<span style="color:#a6e22e">chanInt</span>)
+        <span style="color:#75715e">// 发送
+</span><span style="color:#75715e"></span>    }()
+    <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
+        <span style="color:#f92672">...</span>
+        <span style="color:#75715e">// 接收
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">done</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">struct</span>{}{}
+    }()
+    <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">done</span>
 }
 </code></pre></div><ul>
 <li>使用了两个通道，一个通道<code>chanInt</code>进行数据传输，另一个<code>done</code>控制完毕时结束主协程</li>
@@ -516,7 +523,7 @@ https://github.com/alex-shpak/hugo-book
 <li>只能且必须在发送端使用<code>defer</code>关闭通道。</li>
 <li>正式使用一般多发送多接收，并使用<code>done</code>信号通知的方式进行通知。</li>
 </ul>
-<p>在工作中，通道的使用更为复杂，下一节将介绍<code>select</code>，敬请期待！</p>
+<p>在工作中，通道的使用更为复杂，下一节将介绍两个面试高频的问题，敬请期待！</p>
 </article>
  
       <div class="book-footer justify-between"></div>

@@ -1,0 +1,238 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="5.4 命令行应用 #  5.4.1 标准库flag #  一个简单的命令行程序应该可以输出帮助信息，也可以通过传递参数改变程序的配置内容，-h是flag库的默认帮助参数。
+./goapi -h Usage of ./goapi: -debug is debug -ip string Input bind address (default &#34;127.0.0.1&#34;) -port int Input bind port (default 80) -version show version information goapi是我build出来的一个二进制go程序，上面所示的四个参数，是自定义的。
+按提示的方法，可以像这样使用参数。
+./goapi -debug -ip 192.168.1.1 ./goapi -port 8080 ./goapi -version 其中像-version这样的参数是bool类型的参数，只要指定了就会设置为true，不指定时为默认值，假如默认值不是false，想指定为false就要显式的指定。
+./goapi -version=false 这几种格式都是兼容的
+-isbool #同于 -isbool=true -age=x #-和等号 -age x #-和空格 --age=x #2个-和等号 --age x #2个-和空格 这些参数用flag实现起来很简单，一个参数定义的格式为 flag.XXX(参数名,默认值,提示信息) 返回指针，如下：
+var ( showVersion = flag."><meta name=theme-color content="#FFFFFF"><meta property="og:title" content><meta property="og:description" content="5.4 命令行应用 #  5.4.1 标准库flag #  一个简单的命令行程序应该可以输出帮助信息，也可以通过传递参数改变程序的配置内容，-h是flag库的默认帮助参数。
+./goapi -h Usage of ./goapi: -debug is debug -ip string Input bind address (default &#34;127.0.0.1&#34;) -port int Input bind port (default 80) -version show version information goapi是我build出来的一个二进制go程序，上面所示的四个参数，是自定义的。
+按提示的方法，可以像这样使用参数。
+./goapi -debug -ip 192.168.1.1 ./goapi -port 8080 ./goapi -version 其中像-version这样的参数是bool类型的参数，只要指定了就会设置为true，不指定时为默认值，假如默认值不是false，想指定为false就要显式的指定。
+./goapi -version=false 这几种格式都是兼容的
+-isbool #同于 -isbool=true -age=x #-和等号 -age x #-和空格 --age=x #2个-和等号 --age x #2个-和空格 这些参数用flag实现起来很简单，一个参数定义的格式为 flag.XXX(参数名,默认值,提示信息) 返回指针，如下：
+var ( showVersion = flag."><meta property="og:type" content="article"><meta property="og:url" content="https://golang.coding3min.com/5.standard-library/5.4-%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%BA%94%E7%94%A8/"><meta property="article:section" content="5.standard-library"><title>5.4 命令行应用 | Go语言精进之路</title><link rel=manifest href=/manifest.json><link rel=icon href=/favicon.png type=image/x-icon><link rel=stylesheet href=/book.min.958cea7827621d6fbcb3acf091344c3e44e3d2a9428f9c3c38bb9eb37bf8c45d.css integrity="sha256-lYzqeCdiHW+8s6zwkTRMPkTj0qlCj5w8OLues3v4xF0=" crossorigin=anonymous><script defer src=/flexsearch.min.js></script><script defer src=/en.search.min.bb70d9ca73f1b47185e81edc8a6596840d02fde1e1a755736a39daf648d4ea1d.js integrity="sha256-u3DZynPxtHGF6B7cimWWhA0C/eHhp1Vzajna9kjU6h0=" crossorigin=anonymous></script><script defer src=/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js integrity="sha256-b2+Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC+NdcPIvZhzk=" crossorigin=anonymous></script></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a href=/><img src=/logo.png alt=Logo><span>Go语言精进之路</span></a></h2><div class=book-search><input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><ul><li><a href=https://coding3min.com>机智的程序员小熊</a></li><li><a href=https://github.com/minibear2333/>GitHub</a></li><li><a href=/qrcode/>微信公众号</a></li><li><strong>帮助与提示</strong><ul><li><a href=/howtocontribute/>0.0 如何参与贡献</a></li><li><a href=/books-share/>0.1 书籍推荐</a></li></ul></li><li><strong>第一章、Go基础</strong><ul><li><a href=/1.base/1-1-install-download/>1.1 安装与下载</a></li><li><a href=/1.base/1-2-hello-world/>1.2 跑起来</a></li><li><a href=/1.base/1-3-go-mod/>1.3 go mod最佳实践</a></li><li><a href=/1.base/1-4-variables/>1.4 变量与常量</a></li><li><a href=/1.base/1-5-switch%E5%92%8Ctypeswitch/>1.5 switch和type switch</a></li><li><a href=/1.base/1-6-for-range/>1.6 循环</a></li><li><a href=/1.base/1-7-range%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90/>1.7 range深度解析</a></li></ul></li><li><strong>第二章、函数和容器</strong><ul><li><a href=/2.func-containers/2-1-func/>2.1 函数简单使用和基本知识解析</a></li><li><a href=/2.func-containers/2-2-%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/>2.2 匿名函数和闭包</a></li><li><a href=/2.func-containers/2-3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0/>2.3 可变参数</a></li><li><a href=/2.func-containers/2-4-map/>2.4 集合（map）</a></li><li><a href=/2.func-containers/2-5-%E6%95%B0%E7%BB%84%E5%92%8C%E5%88%87%E7%89%87/>2.5 数组和切片</a></li></ul></li><li><strong>第三章、语法进阶</strong><ul><li><a href=/3.grammar-advancement/3-1-point/>3.1 指针讨论</a></li><li><a href=/3.grammar-advancement/3-2-struct/>3.2 结构体</a></li><li><a href=/3.grammar-advancement/3-3-%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%A4%9A%E6%80%81/>3.3 接口与多态</a></li><li><a href=/3.grammar-advancement/3-4-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86/>3.4 异常处理</a></li></ul></li><li><strong>第四章、并发和并行</strong><ul><li><a href=/4.concurrent/4-1-go%E8%AF%AD%E8%A8%80%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E7%89%B9%E6%80%A7/>4.1 并发特性</a></li><li><a href=/4.concurrent/4-2-goroutine-wait/>4.2 并发等待</a></li><li><a href=/4.concurrent/4-3-channel/>4.3 channel</a></li><li><a href=/4.concurrent/4-4-deadlock/>4.4 deadlock</a></li><li><a href=/4.concurrent/4-5-select/>4.5 select</a></li><li>-并发安全</li><li>-协程池</li><li>-消费者生产者框架</li><li>-GMP调度原理</li><li>-服务器监控实战</li></ul></li><li><strong>第五章、标准库</strong><ul><li><a href=5.standard-library/5.1-Go%e4%bb%a3%e7%a0%81%e5%9f%ba%e6%9c%ac%e6%a0%87%e5%87%86%e8%a7%84%e8%8c%83>5.1 Go代码基本标准规范</a></li><li><a href=5.standard-library/5.2-json>5.2 json库</a></li><li><a href=5.standard-library/5.3-Go%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c%e5%a4%a7%e5%85%a8>5.3 文件操作</a></li><li><a href=/5.standard-library/%E5%88%87%E7%89%87%E6%8E%92%E5%BA%8Fsort%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/>5.3 排序</a></li><li><a href=5.standard-library/flag%e5%8c%85%e8%af%bb%e5%8f%96%e5%91%bd%e4%bb%a4%e8%a1%8c%e9%85%8d%e7%bd%ae>5.4 命令行操作</a></li><li>-时间处理</li><li>-字符串处理</li><li>-http库</li><li>跨平台编译</li><li>模板</li><li>在线工具系统实战</li></ul></li><li><strong>第六章、反射</strong></li><li><strong>第七章、调试与测试</strong><ul><li><a href=https://mp.weixin.qq.com/s/ltRpuolYuOa8cXivLZLlUw>单元测试</a></li><li>-基准测试</li><li>-mock</li><li>-自动化测试</li><li>-调试</li></ul></li><li><strong>第x章、性能调优</strong><ul><li>-cpu调度</li><li>-内存管理</li><li>-垃圾回收</li><li>-PProf</li><li>-逃逸分析</li><li>-链路追踪</li></ul></li><li><strong>第x章、优秀开源组件</strong><ul><li>-日志</li><li>-配置管理</li><li>-接口文档</li><li>-错误码控制</li><li>-mysql</li><li>-redis</li><li>-mongo</li><li>rabbitmq</li><li>kafka</li><li>-为开源项目贡献代码</li></ul></li><li><strong>第x章、web开发实战</strong><ul><li>-HTTP</li><li>-GRPC</li><li>-Protobuf</li><li>-gin</li></ul></li><li><strong>第x章、爬虫实战</strong></li><li><strong>第x章、在线教育系统实战</strong><ul><li>-在线考试系统实战</li><li>-知识付费系统实战</li><li>-在线课堂系统实战</li></ul></li><li><strong>第x章、微服务</strong><ul><li>熔断与限流</li></ul></li><li><strong>第x章、分布式系统</strong><ul><li>-分布式ID生成器</li><li>-分布式锁</li><li>-分布式一致性算法</li><li>-分布式定时任务</li><li>-分布式计算</li></ul></li><li><strong>第x章、Go语言工程化实战</strong><ul><li>构建约束</li><li><a href=/%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%AE%9E%E8%B7%B5/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/>Go与Dockerfile</a></li></ul></li><li><strong>第x章、Go语言运维实战</strong></li><li><strong>第x章、Go语言监控实战</strong><ul><li>-自监控</li></ul></li><li><strong>第x章、kubernetes开发实战</strong></li><li><strong>第x章、服务治理</strong></li><li><strong>番外1、拓展应用</strong><ul><li><a href=/tools/readme/>小工具</a></li></ul></li><li><strong>番外2、陷阱与缺陷</strong><ul><li><a href=/impossible/range/readme/>range的第二个值实际上是值拷贝</a></li><li><a href=/impossible/%E6%96%B0%E6%89%8B%E5%B8%B8%E7%8A%AF%E7%9A%84%E9%94%99%E8%AF%AF/>新手常犯的错误</a></li><li><a href=/impossible/%E5%88%9D%E5%AD%A6%E8%80%85%E5%B8%B8%E7%8A%AF%E7%9A%84%E9%94%99%E8%AF%AF/>初学者常犯的错误</a></li><li><a href=/impossible/%E8%BF%9B%E9%98%B6%E5%B8%B8%E7%8A%AF%E7%9A%84%E9%94%99%E8%AF%AF/>进阶常犯的错误</a></li></ul></li><li><strong>第x章、GO语言版本分析</strong></li></ul></nav><script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label>
+<strong>5.4 命令行应用</strong>
+<label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><a href=#541-标准库flag>5.4.1 标准库<code>flag</code></a></li><li><a href=#542-flag的简写方式>5.4.2 flag的简写方式</a></li><li><a href=#543-从源码来看flag如何解析参数>5.4.3 从源码来看<code>flag</code>如何解析参数</a></li><li><a href=#544-从源码想到的拓展用法>5.4.4 从源码想到的拓展用法</a></li><li><a href=#小结>小结</a></li><li><a href=#引用>引用</a></li></ul><ul><li><a href=#542-第三方库kingpin>5.4.2 第三方库<code>kingpin</code></a></li><li><a href=#原理解析>原理解析</a></li><li><a href=#性能对比>性能对比</a></li><li><a href=#更成熟的第三方库cobra>更成熟的第三方库<code>cobra</code></a></li><li><a href=#仿python--m-jsontool>仿<code>python -m json.tool</code></a></li><li><a href=#简介>简介</a></li><li><a href=#引用-1>引用</a></li></ul></nav></aside></header><article class=markdown><h1 id=54-命令行应用>5.4 命令行应用
+<a class=anchor href=#54-%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%ba%94%e7%94%a8>#</a></h1><h2 id=541-标准库flag>5.4.1 标准库<code>flag</code>
+<a class=anchor href=#541-%e6%a0%87%e5%87%86%e5%ba%93flag>#</a></h2><p>一个简单的命令行程序应该可以输出帮助信息，也可以通过传递参数改变程序的配置内容，<code>-h</code>是<code>flag</code>库的默认帮助参数。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>./goapi -h
+Usage of ./goapi:
+  -debug
+        is debug
+  -ip string
+        Input bind address <span style=color:#f92672>(</span>default <span style=color:#e6db74>&#34;127.0.0.1&#34;</span><span style=color:#f92672>)</span>
+  -port int
+        Input bind port <span style=color:#f92672>(</span>default 80<span style=color:#f92672>)</span>
+  -version
+        show version information
+</code></pre></div><p><code>goapi</code>是我<code>build</code>出来的一个二进制<code>go</code>程序，上面所示的四个参数，是自定义的。</p><p>按提示的方法，可以像这样使用参数。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>./goapi -debug -ip 192.168.1.1
+./goapi -port <span style=color:#ae81ff>8080</span>
+./goapi -version
+</code></pre></div><p>其中像<code>-version</code>这样的参数是<code>bool</code>类型的参数，只要指定了就会设置为<code>true</code>，不指定时为默认值，假如默认值不是<code>false</code>，想指定为<code>false</code>就要显式的指定。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>./goapi -version<span style=color:#f92672>=</span>false
+</code></pre></div><p>这几种格式都是兼容的</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>-isbool    <span style=color:#75715e>#同于 -isbool=true</span>
+-age<span style=color:#f92672>=</span>x     <span style=color:#75715e>#-和等号</span>
+-age x     <span style=color:#75715e>#-和空格</span>
+--age<span style=color:#f92672>=</span>x    <span style=color:#75715e>#2个-和等号</span>
+--age x    <span style=color:#75715e>#2个-和空格</span>
+</code></pre></div><p>这些参数用<code>flag</code>实现起来很简单，一个参数定义的格式为 <code>flag.XXX(参数名,默认值,提示信息) 返回指针</code>，如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> (
+    <span style=color:#a6e22e>showVersion</span> = <span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>Bool</span>(<span style=color:#e6db74>&#34;version&#34;</span>, <span style=color:#66d9ef>false</span>, <span style=color:#e6db74>&#34;show version information&#34;</span>)
+    <span style=color:#a6e22e>isDebug</span> = <span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>Bool</span>(<span style=color:#e6db74>&#34;debug&#34;</span>, <span style=color:#66d9ef>false</span>, <span style=color:#e6db74>&#34;is debug&#34;</span>)
+    <span style=color:#a6e22e>ip</span>      = <span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>String</span>(<span style=color:#e6db74>&#34;ip&#34;</span>, <span style=color:#e6db74>&#34;127.0.0.1&#34;</span>, <span style=color:#e6db74>&#34;Input bind address&#34;</span>)
+    <span style=color:#a6e22e>port</span>    = <span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>Int</span>(<span style=color:#e6db74>&#34;port&#34;</span>, <span style=color:#ae81ff>80</span>, <span style=color:#e6db74>&#34;Input bind port&#34;</span>)
+)
+</code></pre></div><p>具体有哪些参数变量就要自己定义了，可以用它来设置是否debug模式启动、输出版本信息并退出、输入绑定的<code>ip</code>和端口等。</p><p>然后在恰当的地方调用解析函数<code>flag.Parse()</code>，一定要在使用参数前调用，作为解析命令行程序的输入，不然是没有数据的，写法如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>Parse</span>()
+	<span style=color:#66d9ef>if</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>showVersion</span> {
+		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>version</span>)
+		<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Exit</span>(<span style=color:#ae81ff>0</span>)
+	}
+	<span style=color:#66d9ef>if</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>isDebug</span> {
+		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;set log level: debug&#34;</span>)
+	}
+	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;bind address: %s:%d successfully&#34;</span>,<span style=color:#f92672>*</span><span style=color:#a6e22e>ip</span>,<span style=color:#f92672>*</span><span style=color:#a6e22e>port</span>))
+}
+</code></pre></div><p>可以把这些单独放到一个包中，便于阅读，也可以放到<code>init()</code>函数里自动加载。</p><h2 id=542-flag的简写方式>5.4.2 flag的简写方式
+<a class=anchor href=#542-flag%e7%9a%84%e7%ae%80%e5%86%99%e6%96%b9%e5%bc%8f>#</a></h2><p>有时候可能我们要给某个全局配置变量赋值，这样写可以省掉很多判断的代码，也避免了使用指针，而命令的使用方式没有变化，样例如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> (
+	<span style=color:#a6e22e>ip</span>          <span style=color:#66d9ef>string</span>
+	<span style=color:#a6e22e>port</span>        <span style=color:#66d9ef>int</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>init</span>() {
+	<span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>StringVar</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>ip</span>, <span style=color:#e6db74>&#34;ip&#34;</span>, <span style=color:#e6db74>&#34;127.0.0.1&#34;</span>, <span style=color:#e6db74>&#34;Input bind address(default: 127.0.0.1)&#34;</span>)
+	<span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>IntVar</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>port</span>, <span style=color:#e6db74>&#34;port&#34;</span>, <span style=color:#ae81ff>80</span>, <span style=color:#e6db74>&#34;Input bind port(default: 80)&#34;</span>)
+}
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>Parse</span>()
+	<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span>(<span style=color:#e6db74>&#34;bind address: %s:%d successfully&#34;</span>, <span style=color:#a6e22e>ip</span>, <span style=color:#a6e22e>port</span>))
+}
+</code></pre></div><h2 id=543-从源码来看flag如何解析参数>5.4.3 从源码来看<code>flag</code>如何解析参数
+<a class=anchor href=#543-%e4%bb%8e%e6%ba%90%e7%a0%81%e6%9d%a5%e7%9c%8bflag%e5%a6%82%e4%bd%95%e8%a7%a3%e6%9e%90%e5%8f%82%e6%95%b0>#</a></h2><p>其实之前的方式在源码里就是调用<code>xxVar</code>函数的，以<code>Bool</code>类型为例，源码内容如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>f</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>FlagSet</span>) <span style=color:#a6e22e>Bool</span>(<span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>value</span> <span style=color:#66d9ef>bool</span>, <span style=color:#a6e22e>usage</span> <span style=color:#66d9ef>string</span>) <span style=color:#f92672>*</span><span style=color:#66d9ef>bool</span> {
+	<span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> new(<span style=color:#66d9ef>bool</span>)
+	<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>BoolVar</span>(<span style=color:#a6e22e>p</span>, <span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>value</span>, <span style=color:#a6e22e>usage</span>)
+	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>p</span>
+}
+</code></pre></div><p>其中<code>BoolVal</code>函数解析传入参数，如果没有传入就使用默认值，并把<code>p</code>返回，如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>f</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>FlagSet</span>) <span style=color:#a6e22e>BoolVar</span>(<span style=color:#a6e22e>p</span> <span style=color:#f92672>*</span><span style=color:#66d9ef>bool</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>value</span> <span style=color:#66d9ef>bool</span>, <span style=color:#a6e22e>usage</span> <span style=color:#66d9ef>string</span>) {
+	<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>Var</span>(<span style=color:#a6e22e>newBoolValue</span>(<span style=color:#a6e22e>value</span>, <span style=color:#a6e22e>p</span>), <span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>usage</span>)
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>boolValue</span> <span style=color:#66d9ef>bool</span>
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>newBoolValue</span>(<span style=color:#a6e22e>val</span> <span style=color:#66d9ef>bool</span>, <span style=color:#a6e22e>p</span> <span style=color:#f92672>*</span><span style=color:#66d9ef>bool</span>) <span style=color:#f92672>*</span><span style=color:#a6e22e>boolValue</span> {
+	<span style=color:#f92672>*</span><span style=color:#a6e22e>p</span> = <span style=color:#a6e22e>val</span>
+	<span style=color:#66d9ef>return</span> (<span style=color:#f92672>*</span><span style=color:#a6e22e>boolValue</span>)(<span style=color:#a6e22e>p</span>)
+}
+</code></pre></div><ul><li><code>newBoolValue</code> 函数作为封装，得到一个用<code>type</code>重命名的<code>bool</code>类型<code>boolValue</code> 把返回值设置为默认值</li><li>在<code>flag</code>包的设计中有两个重要的类型，<code>Flag</code>和<code>FlagSet</code>分别表示某个参数，和不重复的参数列表。</li><li><code>f.Var</code>函数的作用就是把参数封装成<code>Flag</code>，并合并到<code>FlagSet</code>中</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>f</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>FlagSet</span>) <span style=color:#a6e22e>Var</span>(<span style=color:#a6e22e>value</span> <span style=color:#a6e22e>Value</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>usage</span> <span style=color:#66d9ef>string</span>) {
+	<span style=color:#75715e>// Remember the default value as a string; it won&#39;t change.
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>flag</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>Flag</span>{<span style=color:#a6e22e>name</span>, <span style=color:#a6e22e>usage</span>, <span style=color:#a6e22e>value</span>, <span style=color:#a6e22e>value</span>.<span style=color:#a6e22e>String</span>()}
+	<span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>alreadythere</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>formal</span>[<span style=color:#a6e22e>name</span>]
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>alreadythere</span> {
+		<span style=color:#75715e>//...错误处理省略
+</span><span style=color:#75715e></span>	}
+	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>formal</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>formal</span> = make(<span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>string</span>]<span style=color:#f92672>*</span><span style=color:#a6e22e>Flag</span>)
+	}
+	<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>formal</span>[<span style=color:#a6e22e>name</span>] = <span style=color:#a6e22e>flag</span>
+}
+</code></pre></div><p><code>FlagSet</code>结构体中起作用的是<code>formal map[string]*Flag</code>类型</p><p>我们已经知道了，在调用<code>Parse</code>的时候，会对参数解析，使用时就可以得到真实值。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// 返回一个FlagSet
+</span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>CommandLine</span> = <span style=color:#a6e22e>NewFlagSet</span>(<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Args</span>[<span style=color:#ae81ff>0</span>], <span style=color:#a6e22e>ExitOnError</span>)
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Parse</span>() {
+	<span style=color:#75715e>// Ignore errors; CommandLine is set for ExitOnError.
+</span><span style=color:#75715e></span>	<span style=color:#75715e>// 调用了FlagSet.Parse
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>CommandLine</span>.<span style=color:#a6e22e>Parse</span>(<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Args</span>[<span style=color:#ae81ff>1</span>:])
+}
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>f</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>FlagSet</span>) <span style=color:#a6e22e>Parse</span>(<span style=color:#a6e22e>arguments</span> []<span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
+	<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>parsed</span> = <span style=color:#66d9ef>true</span>
+	<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>args</span> = <span style=color:#a6e22e>arguments</span>
+	<span style=color:#66d9ef>for</span> {
+		<span style=color:#a6e22e>seen</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>parseOne</span>()
+		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>seen</span> {
+			<span style=color:#66d9ef>continue</span>
+		}
+		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+			<span style=color:#66d9ef>break</span>
+		}
+		<span style=color:#66d9ef>switch</span> <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>errorHandling</span> {
+		<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>ContinueOnError</span>:
+			<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+		<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>ExitOnError</span>:
+			<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>==</span> <span style=color:#a6e22e>ErrHelp</span> {
+				<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Exit</span>(<span style=color:#ae81ff>0</span>)
+			}
+			<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Exit</span>(<span style=color:#ae81ff>2</span>)
+		<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>PanicOnError</span>:
+			panic(<span style=color:#a6e22e>err</span>)
+		}
+	}
+	<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
+}
+</code></pre></div><ul><li>可看到解析的过程实际上是多次调用<code>parseOne()</code>解析出所有的<code>Flag</code>，就像翻页一样</li><li>用<code>switch</code>对应处理错误，决定退出码或直接<code>panic</code></li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>f</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>FlagSet</span>) <span style=color:#a6e22e>parseOne</span>() (<span style=color:#66d9ef>bool</span>, <span style=color:#66d9ef>error</span>) {
+	<span style=color:#75715e>//...
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>args</span>[<span style=color:#ae81ff>0</span>]
+	<span style=color:#75715e>//...
+</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>s</span>[<span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;-&#39;</span> {
+		<span style=color:#75715e>//...
+</span><span style=color:#75715e></span>	}
+	<span style=color:#a6e22e>name</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>s</span>[<span style=color:#a6e22e>numMinuses</span>:]
+	<span style=color:#66d9ef>if</span> len(<span style=color:#a6e22e>name</span>) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> <span style=color:#f92672>||</span> <span style=color:#a6e22e>name</span>[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;-&#39;</span> <span style=color:#f92672>||</span> <span style=color:#a6e22e>name</span>[<span style=color:#ae81ff>0</span>] <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;=&#39;</span> {
+		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>false</span>, <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>failf</span>(<span style=color:#e6db74>&#34;bad flag syntax: %s&#34;</span>, <span style=color:#a6e22e>s</span>)
+	}
+
+	<span style=color:#75715e>// it&#39;s a flag. does it have an argument?
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>args</span> = <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>args</span>[<span style=color:#ae81ff>1</span>:]
+	<span style=color:#75715e>//...
+</span><span style=color:#75715e></span>	<span style=color:#a6e22e>m</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>formal</span>
+	<span style=color:#a6e22e>flag</span>, <span style=color:#a6e22e>alreadythere</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>m</span>[<span style=color:#a6e22e>name</span>] <span style=color:#75715e>// BUG
+</span><span style=color:#75715e></span>	<span style=color:#75715e>// ...如果不存在，或者需要输出帮助信息，则返回
+</span><span style=color:#75715e></span>	<span style=color:#75715e>// ...设置真实值调用到 flag.Value.Set(value)
+</span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>actual</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+		<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>actual</span> = make(<span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>string</span>]<span style=color:#f92672>*</span><span style=color:#a6e22e>Flag</span>)
+	}
+	<span style=color:#a6e22e>f</span>.<span style=color:#a6e22e>actual</span>[<span style=color:#a6e22e>name</span>] = <span style=color:#a6e22e>flag</span>
+	<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>, <span style=color:#66d9ef>nil</span>
+}
+
+</code></pre></div><ul><li><code>parseOne</code> 内部会解析一个输入参数，判断输入参数格式，获取参数值</li><li>解析过程就是逐个取出程序参数，判断<code>-</code>、<code>=</code>取参数与参数值</li><li>解析后查找之前提到的<code>formal map</code>中有没有存在此参数，并设置真实值</li><li>把设置完毕真实值的参数放到<code>f.actual map</code>中，以供它用</li><li>一些错误处理和细节的代码我省略掉了，感兴趣可以自行看源码</li><li>实际上就是逐个参数解析并设置到对应的指针变量的指向上，让返回值出现变化。</li></ul><p><code>flag.Value.Set(value)</code> 这里是设置数据真实值的代码，<code>Value</code>长这样</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Value</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>String</span>() <span style=color:#66d9ef>string</span>
+    <span style=color:#a6e22e>Set</span>(<span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span>
+}
+</code></pre></div><p>它被设计成一个接口，不同的数据类型自己实现这个接口，返回给用户的地址就是这个接口的实例数据，解析过程中，可以通过 Set 方法修改它的值，这个设计确实还挺巧妙的。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>boolValue</span>) <span style=color:#a6e22e>String</span>() <span style=color:#66d9ef>string</span> { <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>FormatBool</span>(bool(<span style=color:#f92672>*</span><span style=color:#a6e22e>b</span>)) }
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>b</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>boolValue</span>) <span style=color:#a6e22e>Set</span>(<span style=color:#a6e22e>s</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#a6e22e>v</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>ParseBool</span>(<span style=color:#a6e22e>s</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>errParse</span>  
+    }
+    <span style=color:#f92672>*</span><span style=color:#a6e22e>b</span> = <span style=color:#a6e22e>boolValue</span>(<span style=color:#a6e22e>v</span>)
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+}
+</code></pre></div><h2 id=544-从源码想到的拓展用法>5.4.4 从源码想到的拓展用法
+<a class=anchor href=#544-%e4%bb%8e%e6%ba%90%e7%a0%81%e6%83%b3%e5%88%b0%e7%9a%84%e6%8b%93%e5%b1%95%e7%94%a8%e6%b3%95>#</a></h2><p><code>flag</code>的常用方法，基本原理也了解了，我注意到整个过程都围绕了<code>FlagSet</code>这个结构体，它是核心的解析类。</p><p>在库内部提供了一个 <code>*FlagSet</code> 的实例对象 <code>CommandLine</code>，它通过<code>NewFlagSet</code>方法创建。并且为它的所有方法封装了一下直接对外，说明我们可以在外部用到它做某些更高级的事情。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>CommandLine</span> = <span style=color:#a6e22e>NewFlagSet</span>(<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Args</span>[<span style=color:#ae81ff>0</span>], <span style=color:#a6e22e>ExitOnError</span>)
+</code></pre></div><p>可以看到调用的时候是传入命令行第一个参数，第二个参数表示报错时应该呈现怎样的错误。</p><p>那就意味着我们可以根据命令行第一个参数不同而呈现不同的表现！效果如下</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>$ ./subcommands 
+expected <span style=color:#e6db74>&#39;foo&#39;</span> or <span style=color:#e6db74>&#39;bar&#39;</span> subcommands
+
+$ ./subcommands foo -h
+Usage of foo:
+  -enable
+        enable
+        
+$./subcommands foo -enable
+subcommand <span style=color:#e6db74>&#39;foo&#39;</span>
+  enable: true
+  tail: <span style=color:#f92672>[]</span>
+</code></pre></div><p>怎么写？</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#a6e22e>foo</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>NewFlagSet</span>(<span style=color:#e6db74>&#34;foo&#34;</span>, <span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>ExitOnError</span>)
+<span style=color:#a6e22e>fooEnable</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>foo</span>.<span style=color:#a6e22e>Bool</span>(<span style=color:#e6db74>&#34;enable&#34;</span>, <span style=color:#66d9ef>false</span>, <span style=color:#e6db74>&#34;enable&#34;</span>)
+
+<span style=color:#a6e22e>bar</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>NewFlagSet</span>(<span style=color:#e6db74>&#34;bar&#34;</span>, <span style=color:#a6e22e>flag</span>.<span style=color:#a6e22e>ExitOnError</span>)
+<span style=color:#a6e22e>barLevel</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>bar</span>.<span style=color:#a6e22e>Int</span>(<span style=color:#e6db74>&#34;level&#34;</span>, <span style=color:#ae81ff>0</span>, <span style=color:#e6db74>&#34;level&#34;</span>)
+
+<span style=color:#66d9ef>if</span> len(<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Args</span>) &lt; <span style=color:#ae81ff>2</span> {
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;expected &#39;foo&#39; or &#39;bar&#39; subcommands&#34;</span>)
+    <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Exit</span>(<span style=color:#ae81ff>1</span>)
+}
+</code></pre></div><ul><li>定义两个不同的<code>FlagSet</code>，接受<code>foo</code>或<code>bar</code>参数</li><li>绑定错误时退出</li><li>分别为每个<code>FlagSet</code>绑定参数</li><li>如果判断参数少于2个退出</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>switch</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Args</span>[<span style=color:#ae81ff>1</span>] {
+<span style=color:#66d9ef>case</span> <span style=color:#e6db74>&#34;foo&#34;</span>:
+    <span style=color:#a6e22e>foo</span>.<span style=color:#a6e22e>Parse</span>(<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Args</span>[<span style=color:#ae81ff>2</span>:])
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;subcommand &#39;foo&#39;&#34;</span>)
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;  enable:&#34;</span>, <span style=color:#f92672>*</span><span style=color:#a6e22e>fooEnable</span>)
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;  tail:&#34;</span>, <span style=color:#a6e22e>foo</span>.<span style=color:#a6e22e>Args</span>())
+<span style=color:#66d9ef>case</span> <span style=color:#e6db74>&#34;bar&#34;</span>:
+    <span style=color:#a6e22e>bar</span>.<span style=color:#a6e22e>Parse</span>(<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Args</span>[<span style=color:#ae81ff>2</span>:])
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;subcommand &#39;bar&#39;&#34;</span>)
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;  level:&#34;</span>, <span style=color:#f92672>*</span><span style=color:#a6e22e>barLevel</span>)
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;  tail:&#34;</span>, <span style=color:#a6e22e>bar</span>.<span style=color:#a6e22e>Args</span>())
+<span style=color:#66d9ef>default</span>:
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;expected &#39;foo&#39; or &#39;bar&#39; subcommands&#34;</span>)
+    <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Exit</span>(<span style=color:#ae81ff>1</span>)
+}
+</code></pre></div><ul><li>使用<code>switch</code>来切换命令行参数，绑定不同的变量</li><li>对应不同变量输出不同表现</li><li><code>x.Args()</code>可以打印未匹配到的其他参数</li></ul><p>其他</p><p>flag 提供三种错误处理的方式:</p><ul><li><code>ContinueOnError</code>: 通过 <code>Parse</code> 的返回值返回错误</li><li><code>ExitOnError</code>: 调用 <code>os.Exit(2)</code> 直接退出程序，这是默认的处理方式</li><li><code>PanicOnError</code>: 调用 <code>panic</code> 抛出错误</li></ul><h2 id=小结>小结
+<a class=anchor href=#%e5%b0%8f%e7%bb%93>#</a></h2><p>通过本节我们了解到了标准库<code>flag</code>的使用方法，参数绑定的两种方式，还通过源码解析了内部是如何巧妙的实现的。</p><p>我们还使用源码暴露出来的函数，接收不同参数呈现不同的表现，这种方式可以让应用呈现完成不同的功能，我想到的是用来通过环境变量改变命令用法、或者让程序复用大段逻辑呈现不同作用时使用。</p><p>但现在微服务那么流行，大多功能集成在一个服务里是不科学的，如果有重复代码应该提炼成共同模块才是王道。</p><p>你还想到哪些使用场景呢？</p><h2 id=引用>引用
+<a class=anchor href=#%e5%bc%95%e7%94%a8>#</a></h2><ul><li>源码包 <a href=https://golang.org/src/flag/flag.go>https://golang.org/src/flag/flag.go</a></li><li>命令行子命令 <a href=https://gobyexample-cn.github.io/command-line-subcommands>https://gobyexample-cn.github.io/command-line-subcommands</a></li><li>命令行解析库 flag <a href=https://segmentfault.com/a/1190000021143456>https://segmentfault.com/a/1190000021143456</a></li><li>腾讯云文档flag <a href=https://cloud.tencent.com/developer/section/1141707#stage-100022105>https://cloud.tencent.com/developer/section/1141707#stage-100022105</a></li></ul><h1 id=未完待续拼命更新中>未完待续，拼命更新中。。。。
+<a class=anchor href=#%e6%9c%aa%e5%ae%8c%e5%be%85%e7%bb%ad%e6%8b%bc%e5%91%bd%e6%9b%b4%e6%96%b0%e4%b8%ad>#</a></h1><h2 id=542-第三方库kingpin>5.4.2 第三方库<code>kingpin</code>
+<a class=anchor href=#542-%e7%ac%ac%e4%b8%89%e6%96%b9%e5%ba%93kingpin>#</a></h2><p><code>kingpin</code> 功能比 <code>flag</code> 库而言用法差不多，但更强大。 相比 <code>flag</code> 库，最重要的一点就是支持不加 <code>-</code> 的调用。</p><p>比如一个命令行程序有三个函数分别为 <code>A</code> , <code>B</code> , <code>C</code> ，要实现根据命令行的输入运行不同的函数，如果用flag实现的话应该是下面这种使用方法：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>./cli --method A
+./cli --method B
+./cli --method C
+</code></pre></div><p><code>flag</code>库每次都需要输入 <code>--method</code> ，然而用 <code>kingpin</code> 库实现的话就可以达到下面这种效果：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>./cli A
+./cli B
+./cli C
+</code></pre></div><p>一下子节省了很多不必要的输入。</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span>(
+	<span style=color:#a6e22e>showVersion</span> = <span style=color:#a6e22e>kingpin</span>.<span style=color:#a6e22e>Flag</span>(<span style=color:#e6db74>&#34;version&#34;</span>,
+		<span style=color:#e6db74>&#34;show version information&#34;</span>,
+	).<span style=color:#a6e22e>Default</span>(<span style=color:#e6db74>&#34;false&#34;</span>).<span style=color:#a6e22e>Bool</span>()
+)
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+	<span style=color:#a6e22e>kingpin</span>.<span style=color:#a6e22e>HelpFlag</span>.<span style=color:#a6e22e>Short</span>(<span style=color:#e6db74>&#39;h&#39;</span>)
+	<span style=color:#a6e22e>kingpin</span>.<span style=color:#a6e22e>Parse</span>()
+	<span style=color:#66d9ef>if</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>showVersion</span>{
+		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;1.0.0&#34;</span>)
+		<span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Exit</span>(<span style=color:#ae81ff>0</span>)
+	}
+}
+</code></pre></div><p>最后，引入此包是</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-BASH data-lang=BASH>go get gopkg.in/alecthomas/kingpin.v2
+</code></pre></div><p>官方文档参考
+<a href=http://godoc.org/gopkg.in/alecthomas/kingpin.v2>package kingpin</a></p><h2 id=原理解析>原理解析
+<a class=anchor href=#%e5%8e%9f%e7%90%86%e8%a7%a3%e6%9e%90>#</a></h2><h2 id=性能对比>性能对比
+<a class=anchor href=#%e6%80%a7%e8%83%bd%e5%af%b9%e6%af%94>#</a></h2><h2 id=更成熟的第三方库cobra>更成熟的第三方库<code>cobra</code>
+<a class=anchor href=#%e6%9b%b4%e6%88%90%e7%86%9f%e7%9a%84%e7%ac%ac%e4%b8%89%e6%96%b9%e5%ba%93cobra>#</a></h2><h2 id=仿python--m-jsontool>仿<code>python -m json.tool</code>
+<a class=anchor href=#%e4%bb%bfpython--m-jsontool>#</a></h2><h2 id=简介>简介
+<a class=anchor href=#%e7%ae%80%e4%bb%8b>#</a></h2><h2 id=引用-1>引用
+<a class=anchor href=#%e5%bc%95%e7%94%a8-1>#</a></h2><p><a href=https://xuanyu.li/2017/08/05/golang-cli-args-parse/>Golang命令行参数解析库kingpin</a></p></article><div class="book-footer justify-between"></div><hr style=height:1px;background:var(--gray-200)><br><p>本图书由<a href=https://github.com/minibear2333>小熊</a>©2021 版权所有，<a href=https://golang.coding3min.com/>所有文章</a>采用<a href=https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh>知识署名-非商业性使用-禁止演绎 4.0 国际</a>进行许可。</p><div style=text-align:center><p><img width=70% style=width:70%;height:70%;!important src=https://coding3min.oss-accelerate.aliyuncs.com/2021/06/24/qrcode.png></p></div><script src=https://utteranc.es/client.js repo=minibear2333/blog-comment issue-term=title theme=github-light crossorigin=anonymous async></script><footer class=book-footer><div class="flex flex-wrap justify-between"><div><a class="flex align-center" href=https://github.com/golang-minibear2333/golang/edit/master/./5.standard-library/5.4-%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%ba%94%e7%94%a8.md target=_blank rel=noopener><img src=/svg/edit.svg class=book-icon alt=Edit>
+<span>Edit this page</span></a></div></div><script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><a href=#541-标准库flag>5.4.1 标准库<code>flag</code></a></li><li><a href=#542-flag的简写方式>5.4.2 flag的简写方式</a></li><li><a href=#543-从源码来看flag如何解析参数>5.4.3 从源码来看<code>flag</code>如何解析参数</a></li><li><a href=#544-从源码想到的拓展用法>5.4.4 从源码想到的拓展用法</a></li><li><a href=#小结>小结</a></li><li><a href=#引用>引用</a></li></ul><ul><li><a href=#542-第三方库kingpin>5.4.2 第三方库<code>kingpin</code></a></li><li><a href=#原理解析>原理解析</a></li><li><a href=#性能对比>性能对比</a></li><li><a href=#更成熟的第三方库cobra>更成熟的第三方库<code>cobra</code></a></li><li><a href=#仿python--m-jsontool>仿<code>python -m json.tool</code></a></li><li><a href=#简介>简介</a></li><li><a href=#引用-1>引用</a></li></ul></nav></div></aside></main></body></html>

@@ -2,6 +2,7 @@
 以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。
 go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 channel 相互配合，这决定了他的先天优势。
 goroutine 也就是go协程，概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
+这里说并发其实是不严谨的，只不过我们习惯了说并发，延展阅读见 goroutine是并行还是并发？
 4.1.1 他和线程对比 # 从使用上讲
 比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 channel 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说） 从其实现上讲
 从资源上讲，线程的栈内存大小一般是固定的一般为 2MB ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 goroutine 栈内存是可变的，初始一般为 2KB ，随着需求可以扩大达到 1GB。 所以 goroutine 十分的轻量级，且能满足不同的需求。 从调度上讲，线程的调度由 OS 的内核完成；线程的切换需要 CPU 寄存器 和 内存的数据交换 ，从而切换不同的线程上下文。 其触发方式为 CPU时钟 , 而 goroutine 的调度则比较轻量级，由自身的调度器完成。 协程同线程的关系，有些类似于 线程同进程的关系。 4.</description></item><item><title/><link>https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/</guid><description>4.2 并发等待 # 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.2-goroutine-wait/

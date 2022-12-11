@@ -132,6 +132,7 @@ func divisionInt(a, b int) (int, error) { if b == 0 { return -1, errors.</descri
 以前我们写并发的程序一般是用多线程来实现，自己维护一个线程池，在恰当的时候创建、销毁、分配资源。
 go 在并发方面为我们提供了一个语言级别的支持， goroutine 和 channel 相互配合，这决定了他的先天优势。
 goroutine 也就是go协程，概念类似于线程， Go 程序运行时会自动调度和管理，系统能智能地将 goroutine 中的任务合理地分配给 CPU , 让这些任务尽量并发运作。
+这里说并发其实是不严谨的，只不过我们习惯了说并发，延展阅读见 goroutine是并行还是并发？
 4.1.1 他和线程对比 # 从使用上讲
 比线程更轻量级，可以创建十万、百万不用担心资源问题。 和 channel 搭配使用，实现高并发， goroutine 之间传输数据更方便。 如果访问同一个数据块，要小心数据竞态问题、共享锁还是互斥锁的选择问题、并发操作的数据同步问题（后面会说） 从其实现上讲
 从资源上讲，线程的栈内存大小一般是固定的一般为 2MB ，虽然这个数值可以设置，但是 太大了浪费，太小了容易不够用, 而 goroutine 栈内存是可变的，初始一般为 2KB ，随着需求可以扩大达到 1GB。 所以 goroutine 十分的轻量级，且能满足不同的需求。 从调度上讲，线程的调度由 OS 的内核完成；线程的切换需要 CPU 寄存器 和 内存的数据交换 ，从而切换不同的线程上下文。 其触发方式为 CPU时钟 , 而 goroutine 的调度则比较轻量级，由自身的调度器完成。 协程同线程的关系，有些类似于 线程同进程的关系。 4.</description></item><item><title/><link>https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/4.concurrent/4-2-goroutine-wait/</guid><description>4.2 并发等待 # 本节源码位置 https://github.com/golang-minibear2333/golang/blob/master/4.concurrent/4.2-goroutine-wait/
@@ -222,7 +223,7 @@ package main import ( &amp;#34;fmt&amp;#34; &amp;#34;net/http&amp;#34; &amp;#34;
 在本书中会持续迭代总结各种Go语言脚手架的使用方式与基本原理，是一本速查笔记，也是一本深入笔记，适合中、高级工程师学习收藏。
 面向群体 # 有一定其他语言基础的 Go 语言爱好者 后端、云计算、安全等领域工作涉及到 Go 语言的工程师 想要进一步熟悉掌握Go并发、以及探索 Go 语言框架、开源项目的开发人员 为什么要写这本书 # 我的职业生涯非常丰富，做过研发、实施运维、架构的工作，数年前我学习过Java，接着从事C++开发的工作、后来工作中陆续接触过 C#、Python、Golang，目前专注于Golang研发。
 虽然网上有很多入门与实战方面的书籍，但我想总结一下我工作或学习过程中接触到的知识，以供查阅。
-关于版权 # 本书可能会借鉴其他书籍资料，一些网络图片，本书不作为商业用途，仅供学习交流，所借鉴内容来源于网络，会在文章末尾处标记引用位置。如源文章标记禁止引用则不会引用。</description></item><item><title/><link>https://golang.coding3min.com/todo/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/todo/</guid><description>文章正在创作中 # 文章即将出炉，请耐心等待&amp;hellip;&amp;hellip;
+贡献与勘误 # 欢迎一起完善此书，有任何问题可以直接在电子书评论区留言，或者直接提issue，我看到会第一时间回复和修订，也欢迎直接修改发起pr贡献，感谢大家。</description></item><item><title/><link>https://golang.coding3min.com/todo/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/todo/</guid><description>文章正在创作中 # 文章即将出炉，请耐心等待&amp;hellip;&amp;hellip;
 你可以：
 加入我一起完成这篇文章，重新梳理知识体系 欢迎给我提 pr 如果你从来没有提过 pr，可以参考 我给开源项目提pr的过程，这是很重要的一种代码协作能力 再次感谢你的支持</description></item><item><title/><link>https://golang.coding3min.com/tools/readme/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/tools/readme/</guid><description>golang小工具 # 作用 位置 备注 代码测速 speed.go 可超时缓存 cache.go 任意类型变量缓存，可设置超时时间 线程安全的缓存 map.go 任意类型变量缓存，线程安全 配置proxy static_proxy.go 简单配置http proxy 捕获panic defer_panic.go 重试函数 func.go 可传入函数和重试次数，自动重试，要求返回是否成功 参数 go命令行读取参数 - 文件写入读取 - - 配置文件 - -</description></item><item><title/><link>https://golang.coding3min.com/%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%AE%9E%E8%B7%B5/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%AE%9E%E8%B7%B5/golang%E6%89%93%E9%95%9C%E5%83%8Fdockerfile%E7%9A%84%E5%86%99%E6%B3%95/</guid><description>引言 # 对于dockerfile而言，何为完美? 我认为应该满足以下三点：
 体积小 构建快 够安全 PS: 注意！从 Docker 17.05 版本起， Docker 才开始支持容器镜像的多阶段构建(multi-stage build)，所以本文所使用 docker 版本必须高于 17.05 （多阶段构建的意思就是把编译的过程也放同一个 Dockerfile 里，不用在自己的开发机或服务器上编译，再把编译出的二进制程序打入镜像）

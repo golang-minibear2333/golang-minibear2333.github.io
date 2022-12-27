@@ -46,9 +46,15 @@ done := make(chan struct{}) timer := time.NewTimer(1 * time.Second) go func () {
 var s []int func appendValue(i int) { s = append(s, i) } func main() { for i := 0; i &amp;lt; 10000; i++ { //10000个协程同时添加切片 go appendValue(i) } time.Sleep(2) fmt.Println(len(s)) } 比如上例，10000 个协程同时为切片增加数据，你可以尝试运行一下，打印出来的一定不是 10000 。
 以上并发操作的同一个资源，专业名词叫做临界区。 因为并发操作存在数据竞争，导致数据值意外改写，最后的结果与期待的不符，这种问题统称为竞态问题。 常见于控制商品减库存，控制余额增减等情况。 那么有什么办法解决竞态问题呢？
 互斥锁：让访问某个临界区的时候，只有一个 goroutine 可以访问。 原子操作：让某些操作变成原子的，这个后续讨论。 这两个思路贯穿了无数的高并发/分布式方案，区别是在一个进程应用中使用，还是借助某些第三方手段来实现，比如中间件。独孤九剑森罗万象一定要牢牢记住。
-4.7.2 互斥锁 # Go 语言中互斥锁的用法如下：</description></item><item><title/><link>https://golang.coding3min.com/4.concurrent/4-8-%E5%8E%9F%E5%AD%90/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/4.concurrent/4-8-%E5%8E%9F%E5%AD%90/</guid><description/></item><item><title/><link>https://golang.coding3min.com/4.concurrent/4-9-%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E4%B8%8E%E7%B1%BB%E5%9E%8B/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/4.concurrent/4-9-%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E4%B8%8E%E7%B1%BB%E5%9E%8B/</guid><description>并发安全与变量类型 # 因为现在的机器都是64位了，以下内容都只探讨64位，有兴趣的同学可以补充32位的情况。
+4.7.2 互斥锁 # Go 语言中互斥锁的用法如下：</description></item><item><title/><link>https://golang.coding3min.com/4.concurrent/4-8-%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/4.concurrent/4-8-%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/</guid><description>4.8 原子操作 # 代码中的加锁操作因为涉及内核态的上下文切换会比较耗时、代价比较高。针对基本数据类型我们还可以使用原子操作来保证并发安全，因为原子操作是Go语言提供的方法它在用户态就可以完成，因此性能比加锁操作更好。Go语言中原子操作由内置的标准库sync/atomic 提供。
+大多数情况下我们都是针对基本数据类型进行数据操作，能不加锁就不加锁。
+首先很多人都不相信基本类型并发修改会出现竞态问题。不妨尝试一下，并发加一。
+var wg sync.WaitGroup for i := 0; i &amp;lt; 10000; i++ { wg.Add(1) go func () { defer wg.Done() xInt32++ }() } wg.Wait() print(xInt32) 无论输出多少次都无法达到10000,之所以如此就是因为此处的加1操作并不是原子的，都是先取当前值，加1，再赋值，会出现覆盖的情况。
+4.8.1 修改 # 修改是最常用到的。
+func modify(delta int32) { atomic.AddInt32(&amp;amp;xInt32, delta) atomic.AddInt64(&amp;amp;xInt64, int64(delta)) atomic.AddUint32(&amp;amp;xuInt32, uint32(delta)) atomic.AddUint64(&amp;amp;xuInt64, uint64(delta)) } 我们忽略了Uintptr的讨论，这是内存地址的整数表示，是用来存地址内容的，暂时没有遇到过指针的数据计算。
+var wg sync.WaitGroup for i := 0; i &amp;lt; 10000; i++ { wg.Add(1) go func () { defer wg.</description></item><item><title/><link>https://golang.coding3min.com/4.concurrent/4-9-sync/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/4.concurrent/4-9-sync/</guid><description>并发安全与变量类型 # 因为现在的机器都是64位了，以下内容都只探讨64位，有兴趣的同学可以补充32位的情况。
 常见类型
 安全：字节型，布尔型，整形，浮点型、指针 不安全：字符串、函数、数组，切片，字典，通道，接口
 可知只要是一条机器指令操作的都是安全的，而不安全的除了数组，其他底层数据结构实际上都是 struct，都需要多条指令操作，所以不是并发安全的。
 ps: 这里是指channel本身，不是指channel内部传递的数据
-其他： 不安全：复数型（实部虚部分开赋值）这个很少用到就不讨论了。</description></item><item><title/><link>https://golang.coding3min.com/4.concurrent/4-9/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/4.concurrent/4-9/</guid><description>&amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #</description></item><item><title/><link>https://golang.coding3min.com/4.concurrent/%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/4.concurrent/%E5%AE%9E%E6%88%98-%E6%97%A5%E5%BF%97%E7%9B%91%E6%8E%A7/</guid><description>&amp;hellip;本节正在编写，未完待续，催更请留言，我会收到邮件 #</description></item></channel></rss>
+其他： 不安全：复数型（实部虚部分开赋值）这个很少用到就不讨论了。</description></item></channel></rss>

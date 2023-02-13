@@ -28,4 +28,7 @@ func (p man) eat() string { return &amp;#34;eat banana&amp;#34; } func (p man) p
 3.4.2 异常的形式 # 我们应该让异常以这样的形式出现
 func Demo() (int, error) 我们应该让异常以这样的形式处理（卫述语句）
 _,err := errorDemo() if err!=nil{ fmt.Println(err) return } 3.4.3 自定义异常 # 比如程序有一个功能为除法的函数，除数不能为 0 ，否则程序为出现异常，我们就要提前判断除数，如果为 0 返回一个异常。那他应该这么写。
-func divisionInt(a, b int) (int, error) { if b == 0 { return -1, errors.</description></item></channel></rss>
+func divisionInt(a, b int) (int, error) { if b == 0 { return -1, errors.</description></item><item><title/><link>https://golang.coding3min.com/3.grammar-advancement/3-5-%E5%8F%8D%E5%B0%84/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://golang.coding3min.com/3.grammar-advancement/3-5-%E5%8F%8D%E5%B0%84/</guid><description>3.5 反射 # 几乎每个后台语言都有反射，主要是因为强类型语言，在编译期间需要明确知道类型，反射的提供是为了允许程序在运行期间才拿到真实的类型。
+在不知道类型，或者说无法预期什么类型的时候，
+小结 # C++里为什么没有反射，你知道吗？
+TODO 本文待续，留言催更</description></item></channel></rss>
